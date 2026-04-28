@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowLeft, Download, Eye, ChevronDown, FileSpreadsheet, Printer, Settings, Menu } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { StatusBadge, RevisionBadge } from '../ui/Badge';
+import { ThemeToggle } from '../ui/ThemeToggle';
 import { exportToExcel } from '../../lib/exportExcel';
 import { ProjectSetupModal } from '../features/ProjectSetupModal';
 import type { ProjectStatus } from '../../types';
@@ -105,6 +106,8 @@ export function TopBar({ onMenuClick }: Props) {
           <Eye size={14} />
           <span className="hidden md:inline">Client View</span>
         </button>
+
+        <ThemeToggle />
 
         {/* Settings */}
         <button

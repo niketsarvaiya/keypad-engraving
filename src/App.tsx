@@ -7,13 +7,19 @@ import { ClientViewPage } from './pages/ClientViewPage';
 import { RepositoryPage } from './pages/RepositoryPage';
 
 export default function App() {
-  const { view, hydrate } = useStore();
+  const { view, hydrate, theme } = useStore();
   const { hydrate: hydrateRepo } = useRepositoryStore();
 
   useEffect(() => {
     hydrate();
     hydrateRepo();
   }, [hydrate, hydrateRepo]);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    html.classList.remove('dark', 'light', 'system');
+    html.classList.add(theme);
+  }, [theme]);
 
   if (view === 'editor') return <EditorPage />;
   if (view === 'client-view') return <ClientViewPage />;

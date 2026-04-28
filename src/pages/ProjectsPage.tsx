@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useStore } from '../store/useStore';
 import { StatusBadge, RevisionBadge } from '../components/ui/Badge';
 import { NewProjectModal } from '../components/features/ProjectSetupModal';
+import { ThemeToggle } from '../components/ui/ThemeToggle';
 import { importFromBOQ } from '../lib/boqImport';
 import { createDemoProject } from '../lib/defaults';
 import type { BOQProject } from '../types';
@@ -53,6 +54,7 @@ export function ProjectsPage() {
             <p className="text-[13px] text-[#8b8fa8] mt-0.5">Design, review, and export keypad engraving layouts</p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
+            <ThemeToggle />
             <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={handleBOQImport} />
             <button
               onClick={() => setView('repository')}

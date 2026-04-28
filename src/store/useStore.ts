@@ -8,7 +8,13 @@ import { generateId, createDefaultButtons, DEFAULT_SETTINGS } from '../lib/defau
 import { loadProjects, saveProject, deleteProjectById } from '../lib/storage';
 import { buildSnapshot, computeChanges } from '../lib/boqDiff';
 
+export type Theme = 'dark' | 'light' | 'system';
+
 interface EngravingStore {
+  // ── Theme ─────────────────────────────────────────────────────────
+  theme: Theme;
+  setTheme: (t: Theme) => void;
+
   // ── View ──────────────────────────────────────────────────────────
   view: AppView;
   setView: (v: AppView) => void;
@@ -80,6 +86,13 @@ function mutateProject(
 }
 
 export const useStore = create<EngravingStore>((set, get) => ({
+  // ── Theme ─────────────────────────────────────────────────────────
+  theme: (localStorage.getItem('theme') as Theme) ?? 'dark',
+  setTheme: t => {
+    localStorage.setItem('theme', t);
+    set({ theme: t });
+  },
+
   // ── View ──────────────────────────────────────────────────────────
   view: 'projects',
   setView: v => set({ view: v }),

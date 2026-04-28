@@ -1,44 +1,105 @@
 @import "tailwindcss";
 
 @theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  --color-accent:       #6366f1;
+  --color-accent-hover: #4f52e0;
+  --color-success:      #10b981;
+  --color-warning:      #f59e0b;
+  --color-critical:     #ef4444;
+  --color-info:         #3b82f6;
+}
+
+/* ─── Dark theme (default) ─────────────────────── */
+:root {
   --color-surface-0: #0a0b0f;
   --color-surface-1: #0f1117;
   --color-surface-2: #161820;
   --color-surface-3: #1e2028;
   --color-surface-4: #252830;
 
-  --color-border: rgba(255, 255, 255, 0.06);
-  --color-border-strong: rgba(255, 255, 255, 0.12);
+  --color-border:        rgba(255,255,255,0.06);
+  --color-border-strong: rgba(255,255,255,0.12);
 
-  --color-text-primary: #f0f1f3;
+  --color-text-primary:   #f0f1f3;
   --color-text-secondary: #8b8fa8;
-  --color-text-muted: #565a72;
+  --color-text-muted:     #565a72;
 
-  --color-accent: #6366f1;
-  --color-accent-hover: #4f52e0;
-  --color-accent-dim: rgba(99, 102, 241, 0.12);
+  --color-accent-dim:   rgba(99,102,241,0.12);
+  --color-success-dim:  rgba(16,185,129,0.12);
+  --color-warning-dim:  rgba(245,158,11,0.12);
+  --color-critical-dim: rgba(239,68,68,0.12);
+  --color-info-dim:     rgba(59,130,246,0.12);
 
-  --color-success: #10b981;
-  --color-success-dim: rgba(16, 185, 129, 0.12);
+  --color-overlay:       rgba(255,255,255,0.06);
+  --color-overlay-hover: rgba(255,255,255,0.1);
 
-  --color-warning: #f59e0b;
-  --color-warning-dim: rgba(245, 158, 11, 0.12);
-
-  --color-critical: #ef4444;
-  --color-critical-dim: rgba(239, 68, 68, 0.12);
-
-  --color-info: #3b82f6;
-  --color-info-dim: rgba(59, 130, 246, 0.12);
-
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
-
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  color-scheme: dark;
 }
 
+/* ─── Light theme ──────────────────────────────── */
+html.light {
+  --color-surface-0: #eef0f5;
+  --color-surface-1: #f4f6fb;
+  --color-surface-2: #ffffff;
+  --color-surface-3: #f0f2f8;
+  --color-surface-4: #e8eaf2;
+
+  --color-border:        rgba(0,0,0,0.07);
+  --color-border-strong: rgba(0,0,0,0.13);
+
+  --color-text-primary:   #111318;
+  --color-text-secondary: #5a5e7a;
+  --color-text-muted:     #8b8fa8;
+
+  --color-accent-dim:   rgba(99,102,241,0.1);
+  --color-success-dim:  rgba(16,185,129,0.1);
+  --color-warning-dim:  rgba(245,158,11,0.1);
+  --color-critical-dim: rgba(239,68,68,0.1);
+  --color-info-dim:     rgba(59,130,246,0.1);
+
+  --color-overlay:       rgba(0,0,0,0.04);
+  --color-overlay-hover: rgba(0,0,0,0.08);
+
+  color-scheme: light;
+}
+
+/* ─── System theme — follows OS preference ─────── */
+@media (prefers-color-scheme: light) {
+  html.system {
+    --color-surface-0: #eef0f5;
+    --color-surface-1: #f4f6fb;
+    --color-surface-2: #ffffff;
+    --color-surface-3: #f0f2f8;
+    --color-surface-4: #e8eaf2;
+
+    --color-border:        rgba(0,0,0,0.07);
+    --color-border-strong: rgba(0,0,0,0.13);
+
+    --color-text-primary:   #111318;
+    --color-text-secondary: #5a5e7a;
+    --color-text-muted:     #8b8fa8;
+
+    --color-accent-dim:   rgba(99,102,241,0.1);
+    --color-success-dim:  rgba(16,185,129,0.1);
+    --color-warning-dim:  rgba(245,158,11,0.1);
+    --color-critical-dim: rgba(239,68,68,0.1);
+    --color-info-dim:     rgba(59,130,246,0.1);
+
+    --color-overlay:       rgba(0,0,0,0.04);
+    --color-overlay-hover: rgba(0,0,0,0.08);
+
+    color-scheme: light;
+  }
+}
+
+/* ─── Base ─────────────────────────────────────── */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
 
@@ -65,35 +126,36 @@
   }
 }
 
+/* ─── Utilities ────────────────────────────────── */
 @layer utilities {
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.1) transparent;
+    scrollbar-color: var(--color-overlay-hover) transparent;
   }
   .scrollbar-thin::-webkit-scrollbar { width: 4px; }
   .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.1);
+    background: var(--color-overlay-hover);
     border-radius: 2px;
   }
 
   .card {
-    background: #161820;
-    border: 1px solid rgba(255,255,255,0.06);
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
     border-radius: 14px;
   }
 
   .card-elevated {
-    background: #1e2028;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--color-surface-3);
+    border: 1px solid var(--color-border);
     border-radius: 14px;
   }
 
   .input-field {
-    background: #0f1117;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--color-surface-1);
+    border: 1px solid var(--color-border-strong);
     border-radius: 8px;
-    color: #f0f1f3;
+    color: var(--color-text-primary);
     padding: 8px 12px;
     font-size: 13px;
     outline: none;
@@ -102,23 +164,111 @@
     font-family: var(--font-sans);
   }
   .input-field:focus {
-    border-color: rgba(99, 102, 241, 0.5);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+    border-color: rgba(99,102,241,0.5);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.08);
   }
-  .input-field::placeholder { color: #565a72; }
+  .input-field::placeholder { color: var(--color-text-muted); }
 
   .label {
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #8b8fa8;
+    color: var(--color-text-muted);
     margin-bottom: 5px;
     display: block;
   }
 }
 
-/* ─── Print styles ──────────────────────────────── */
+/* ─── Light/System: override hardcoded dark Tailwind classes ─── */
+html.light,
+html.system:where(@media (prefers-color-scheme: light)) {
+  /* intentional blank — overrides below handle it */
+}
+
+/* Surface backgrounds */
+html.light [class*="bg-[#0a0b0f]"],
+html.system [class*="bg-[#0a0b0f]"] { background-color: var(--color-surface-0) !important; }
+
+html.light [class*="bg-[#0f1117]"],
+html.system [class*="bg-[#0f1117]"] { background-color: var(--color-surface-1) !important; }
+
+html.light [class*="bg-[#161820]"],
+html.system [class*="bg-[#161820]"] { background-color: var(--color-surface-2) !important; }
+
+html.light [class*="bg-[#1e2028]"],
+html.system [class*="bg-[#1e2028]"] { background-color: var(--color-surface-3) !important; }
+
+html.light [class*="bg-[#252830]"],
+html.system [class*="bg-[#252830]"] { background-color: var(--color-surface-4) !important; }
+
+/* White overlay backgrounds → black overlay */
+html.light [class*="bg-[rgba(255,255,255,0.03)]"],
+html.system [class*="bg-[rgba(255,255,255,0.03)]"] { background-color: rgba(0,0,0,0.02) !important; }
+
+html.light [class*="bg-[rgba(255,255,255,0.04)]"],
+html.system [class*="bg-[rgba(255,255,255,0.04)]"] { background-color: rgba(0,0,0,0.03) !important; }
+
+html.light [class*="bg-[rgba(255,255,255,0.06)]"]:not([class*="hover:"]),
+html.system [class*="bg-[rgba(255,255,255,0.06)]"]:not([class*="hover:"]) { background-color: rgba(0,0,0,0.04) !important; }
+
+html.light [class*="bg-[rgba(255,255,255,0.07)]"]:not([class*="hover:"]),
+html.system [class*="bg-[rgba(255,255,255,0.07)]"]:not([class*="hover:"]) { background-color: rgba(0,0,0,0.05) !important; }
+
+html.light [class*="bg-[rgba(255,255,255,0.08)]"]:not([class*="hover:"]),
+html.system [class*="bg-[rgba(255,255,255,0.08)]"]:not([class*="hover:"]) { background-color: rgba(0,0,0,0.05) !important; }
+
+/* Hover state overrides */
+html.light [class*="hover:bg-[rgba(255,255,255,0.06)]"]:hover,
+html.system [class*="hover:bg-[rgba(255,255,255,0.06)]"]:hover { background-color: rgba(0,0,0,0.05) !important; }
+
+html.light [class*="hover:bg-[rgba(255,255,255,0.04)]"]:hover,
+html.system [class*="hover:bg-[rgba(255,255,255,0.04)]"]:hover { background-color: rgba(0,0,0,0.03) !important; }
+
+/* Borders: white → black alpha */
+html.light [class*="border-[rgba(255,255,255,0.06)]"],
+html.system [class*="border-[rgba(255,255,255,0.06)]"] { border-color: rgba(0,0,0,0.07) !important; }
+
+html.light [class*="border-[rgba(255,255,255,0.08)]"],
+html.system [class*="border-[rgba(255,255,255,0.08)]"] { border-color: rgba(0,0,0,0.09) !important; }
+
+html.light [class*="border-[rgba(255,255,255,0.1)]"],
+html.system [class*="border-[rgba(255,255,255,0.1)]"] { border-color: rgba(0,0,0,0.1) !important; }
+
+html.light [class*="border-[rgba(255,255,255,0.12)]"],
+html.system [class*="border-[rgba(255,255,255,0.12)]"] { border-color: rgba(0,0,0,0.12) !important; }
+
+html.light [class*="border-[rgba(255,255,255,0.15)]"],
+html.system [class*="border-[rgba(255,255,255,0.15)]"] { border-color: rgba(0,0,0,0.15) !important; }
+
+/* Text: light → dark */
+html.light [class*="text-[#f0f1f3]"],
+html.system [class*="text-[#f0f1f3]"] { color: var(--color-text-primary) !important; }
+
+html.light [class*="text-[#8b8fa8]"],
+html.system [class*="text-[#8b8fa8]"] { color: var(--color-text-secondary) !important; }
+
+html.light [class*="text-[#565a72]"],
+html.system [class*="text-[#565a72]"] { color: var(--color-text-muted) !important; }
+
+/* Hover text */
+html.light [class*="hover:text-[#f0f1f3]"]:hover,
+html.system [class*="hover:text-[#f0f1f3]"]:hover { color: var(--color-text-primary) !important; }
+
+html.light [class*="hover:text-[#8b8fa8]"]:hover,
+html.system [class*="hover:text-[#8b8fa8]"]:hover { color: var(--color-text-secondary) !important; }
+
+/* Scrollbar in light mode */
+html.light .scrollbar-thin,
+html.system .scrollbar-thin {
+  scrollbar-color: rgba(0,0,0,0.1) transparent;
+}
+html.light .scrollbar-thin::-webkit-scrollbar-thumb,
+html.system .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1);
+}
+
+/* ─── Print styles ─────────────────────────────── */
 @media print {
   body {
     background: #ffffff !important;
@@ -129,7 +279,7 @@
   .print-page { page-break-after: always; }
 }
 
-/* ─── Theme transitions ──────────────────────────── */
+/* ─── Theme transitions ─────────────────────────── */
 *, *::before, *::after {
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.1s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
 }
