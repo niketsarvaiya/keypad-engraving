@@ -1,7 +1,74 @@
+import {
+  Sun, Moon, Sunset, Sunrise, Lightbulb,
+  Wind, Thermometer, Snowflake,
+  Tv2, Music2, Film, Volume2,
+  ChevronUp, ChevronDown, ChevronLeft, ChevronRight,
+  ShieldCheck, Lock, Bell,
+  Sparkles, Coffee, BedDouble, BookOpen,
+  Power, Home, Plus, Minus, Zap, Flame,
+  type LucideIcon,
+} from 'lucide-react';
 import type {
   KeypadButton, ButtonCount, GlobalEngravingSettings,
   EngravingProject, SceneLibraryItem
 } from '../types';
+
+// ─── Icon Library ─────────────────────────────────────────────────────────────
+
+export interface IconItem {
+  id: string;
+  label: string;
+  lucide: string;
+}
+
+export const ICON_LIBRARY: IconItem[] = [
+  // Lighting & Scenes
+  { id: 'sun',         label: 'Sun / Lights',  lucide: 'Sun' },
+  { id: 'moon',        label: 'Moon / Sleep',  lucide: 'Moon' },
+  { id: 'sunset',      label: 'Sunset',        lucide: 'Sunset' },
+  { id: 'sunrise',     label: 'Morning',       lucide: 'Sunrise' },
+  { id: 'lightbulb',   label: 'Bulb',          lucide: 'Lightbulb' },
+  { id: 'sparkles',    label: 'Party',         lucide: 'Sparkles' },
+  { id: 'zap',         label: 'Flash',         lucide: 'Zap' },
+  // Climate
+  { id: 'wind',        label: 'Fan',           lucide: 'Wind' },
+  { id: 'thermometer', label: 'AC / Temp',     lucide: 'Thermometer' },
+  { id: 'snowflake',   label: 'Cool',          lucide: 'Snowflake' },
+  { id: 'flame',       label: 'Heat',          lucide: 'Flame' },
+  // AV / Entertainment
+  { id: 'tv2',         label: 'TV',            lucide: 'Tv2' },
+  { id: 'music2',      label: 'Music',         lucide: 'Music2' },
+  { id: 'film',        label: 'Movie',         lucide: 'Film' },
+  { id: 'volume2',     label: 'Volume',        lucide: 'Volume2' },
+  // Curtains / Blinds
+  { id: 'chevup',      label: 'Open',          lucide: 'ChevronUp' },
+  { id: 'chevdown',    label: 'Close',         lucide: 'ChevronDown' },
+  { id: 'chevleft',    label: 'Left',          lucide: 'ChevronLeft' },
+  { id: 'chevright',   label: 'Right',         lucide: 'ChevronRight' },
+  // Security
+  { id: 'shield',      label: 'Security',      lucide: 'ShieldCheck' },
+  { id: 'lock',        label: 'Lock',          lucide: 'Lock' },
+  { id: 'bell',        label: 'Alarm',         lucide: 'Bell' },
+  // Life Scenes
+  { id: 'coffee',      label: 'Morning',       lucide: 'Coffee' },
+  { id: 'bed',         label: 'Sleep',         lucide: 'BedDouble' },
+  { id: 'book',        label: 'Reading',       lucide: 'BookOpen' },
+  // Master / Control
+  { id: 'power',       label: 'All Off',       lucide: 'Power' },
+  { id: 'home',        label: 'Home',          lucide: 'Home' },
+  { id: 'plus',        label: 'Plus',          lucide: 'Plus' },
+  { id: 'minus',       label: 'Minus',         lucide: 'Minus' },
+];
+
+export const ICON_MAP: Record<string, LucideIcon> = {
+  Sun, Moon, Sunset, Sunrise, Lightbulb,
+  Wind, Thermometer, Snowflake, Flame,
+  Tv2, Music2, Film, Volume2,
+  ChevronUp, ChevronDown, ChevronLeft, ChevronRight,
+  ShieldCheck, Lock, Bell,
+  Sparkles, Coffee, BedDouble, BookOpen,
+  Power, Home, Plus, Minus, Zap,
+};
 
 export function generateId(): string {
   return Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
@@ -13,6 +80,8 @@ export function createDefaultButtons(count: ButtonCount): KeypadButton[] {
     position: i + 1,
     label: '',
     actionType: 'Empty' as const,
+    engravingMode: 'text' as const,
+    icon: undefined,
     notes: '',
     comments: [],
   }));

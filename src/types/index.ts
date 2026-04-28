@@ -18,6 +18,7 @@ export type ActionType =
 
 export type ButtonCount = 2 | 4 | 6 | 8;
 export type TextCase = 'uppercase' | 'titlecase';
+export type EngravingMode = 'text' | 'icon' | 'text+icon';
 export type AppView = 'projects' | 'editor' | 'client-view' | 'repository';
 export type MobilePanel = 'rooms' | 'editor' | 'library' | 'properties';
 
@@ -114,6 +115,7 @@ export interface KeypadButton {
   position: number;
   label: string;
   actionType: ActionType;
+  engravingMode?: EngravingMode;
   icon?: string;
   notes: string;
   comments: ButtonComment[];
