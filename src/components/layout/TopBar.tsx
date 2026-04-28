@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, Download, Eye, ChevronDown, FileSpreadsheet, Printer, Settings } from 'lucide-react';
+import { ArrowLeft, Download, Eye, ChevronDown, FileSpreadsheet, Printer, Settings, Menu } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { StatusBadge, RevisionBadge } from '../ui/Badge';
 import { exportToExcel } from '../../lib/exportExcel';
@@ -14,7 +14,11 @@ const STATUS_OPTIONS: { value: ProjectStatus; label: string }[] = [
   { value: 'sent-for-engraving', label: 'Sent for Engraving' },
 ];
 
-export function TopBar() {
+interface Props {
+  onMenuClick?: () => void;
+}
+
+export function TopBar({ onMenuClick }: Props) {
   const { activeProject, activeProjectId, closeProject, setStatus, setView } = useStore();
   const project = activeProject();
 
@@ -38,6 +42,16 @@ export function TopBar() {
   return (
     <>
       <div className="h-[52px] min-h-[52px] flex items-center px-4 gap-3 bg-[#0f1117] border-b border-[rgba(255,255,255,0.06)] no-print">
+        {/* Mobile hamburger */}
+        {onMenuClick && (
+          <button
+            onClick={onMenuClick}
+            className="md:hidden p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.06)] text-[#565a72] hover:text-[#f0f1f3] transition-colors"
+          >
+            <Menu size={16} />
+          </button>
+        )}
+
         {/* Back */}
         <button
           onClick={closeProject}
@@ -86,10 +100,10 @@ export function TopBar() {
         {/* Client view */}
         <button
           onClick={() => setView('client-view')}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.06)] text-[#8b8fa8] hover:text-[#f0f1f3] transition-colors text-[12px]"
+          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.06)] text-[#8b8fa8] hover:text-[#f0f1f3] transition-colors text-[12px]"
         >
           <Eye size={14} />
-          Client View
+          <span className="hidden md:inline">Client View</span>
         </button>
 
         {/* Settings */}

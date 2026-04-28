@@ -2,14 +2,27 @@ import { create } from 'zustand';
 import type {
   EngravingProject, EngravingRoom, Keypad, KeypadButton,
   ButtonComment, AppView, ProjectStatus, ButtonCount,
+  MobilePanel, BOQProject, BOQChange,
 } from '../types';
 import { generateId, createDefaultButtons, DEFAULT_SETTINGS } from '../lib/defaults';
 import { loadProjects, saveProject, deleteProjectById } from '../lib/storage';
+import { buildSnapshot, computeChanges } from '../lib/boqDiff';
 
 interface EngravingStore {
   // ── View ──────────────────────────────────────────────────────────
   view: AppView;
   setView: (v: AppView) => void;
+
+  // ── Mobile ────────────────────────────────────────────────────────
+  mobilePanel: MobilePanel;
+  setMobilePanel: (p: MobilePanel) => void;
+  sidebarOpen: boolean;
+  setSidebarOpen: (v: boolean) => void;
+
+  // ── BOQ Diff ──────────────────────────────────────────────────────
+  boqChanges: BOQChange[];
+  syncFromBOQ: (boq: BOQProject, projectId: string) => void;
+  dismissChanges: () => void;
 
   // ── Projects ──────────────────────────────────────────────────────
   projects: EngravingProject[];
@@ -70,6 +83,28 @@ export const useStore = create<EngravingStore>((set, get) => ({
   // ── View ──────────────────────────────────────────────────────────
   view: 'projects',
   setView: v => set({ view: v }),
+
+  // ── Mobile ────────────────────────────────────────────────────────
+  mobilePanel: 'editor',
+  setMobilePanel: p => set({ mobilePanel: p }),
+  sidebarOpen: false,
+  setSidebarOpen: v => set({ sidebarOpen: v }),
+
+  // ── BOQ Diff ──────────────────────────────────────────────────────
+  boqChanges: [],
+  syncFromBOQ: (boq, projectId) => {
+    const snapshot = buildSnapshot(boq);
+    const project = get().projects.find(p => p.id === projectId);
+    if (!project) return;
+    const changes = computeChanges(project, snapshot);
+    const projects = get().projects.map(p =>
+      p.id === projectId ? { ...p, boqSnapshot: snapshot, boqProjectId: boq.id } : p
+    );
+    set({ projects, boqChanges: changes });
+    const updated = projects.find(p => p.id === projectId);
+    if (updated) saveProject(updated);
+  },
+  dismissChanges: () => set({ boqChanges: [] }),
 
   // ── Projects ──────────────────────────────────────────────────────
   projects: [],

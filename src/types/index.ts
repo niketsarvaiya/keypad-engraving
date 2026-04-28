@@ -18,7 +18,75 @@ export type ActionType =
 
 export type ButtonCount = 2 | 4 | 6 | 8;
 export type TextCase = 'uppercase' | 'titlecase';
-export type AppView = 'projects' | 'editor' | 'client-view';
+export type AppView = 'projects' | 'editor' | 'client-view' | 'repository';
+export type MobilePanel = 'rooms' | 'editor' | 'library' | 'properties';
+
+// ─── Keypad Repository ────────────────────────────────────────────────────────
+
+export interface KeypadColor {
+  id: string;
+  name: string;
+  hex: string;
+}
+
+export interface ButtonLayout {
+  rows: number;
+  cols: number;
+}
+
+export type IndicatorType = 'backlit' | 'side-led' | 'none';
+export type EngravingMethod = 'print' | 'laser' | 'pad-print' | 'other';
+export type KeypadMaterial = 'metal' | 'plastic' | 'glass' | 'other';
+
+export interface KeypadLayoutFile {
+  fileName: string;
+  fileType: 'pdf' | 'image' | 'dwg' | 'other';
+  dataUrl?: string;
+}
+
+export interface KeypadModel {
+  id: string;
+  brand: string;
+  modelNumber: string;
+  name: string;
+  buttonCount: ButtonCount;
+  buttonLayout: ButtonLayout;
+  colors: KeypadColor[];
+  hasButtonColors: boolean;
+  buttonColors: KeypadColor[];
+  layoutFile?: KeypadLayoutFile;
+  indicator: IndicatorType;
+  engravingMethods: EngravingMethod[];
+  material: KeypadMaterial;
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ─── BOQ Change Tracking ──────────────────────────────────────────────────────
+
+export type BOQChangeType = 'added' | 'removed' | 'count-changed' | 'unchanged';
+
+export interface BOQChange {
+  type: BOQChangeType;
+  entity: 'room' | 'keypad';
+  roomId: string;
+  roomName: string;
+  keypadName?: string;
+  boqQty?: number;
+  projectQty?: number;
+}
+
+export interface BOQRoomSnapshot {
+  id: string;
+  name: string;
+  keypads: Array<{ name: string; qty: number; modelNumber?: string }>;
+}
+
+export interface BOQSnapshot {
+  snapshotDate: string;
+  rooms: BOQRoomSnapshot[];
+}
 
 // ─── Settings ─────────────────────────────────────────────────────────────────
 
@@ -58,12 +126,19 @@ export interface Keypad {
   name: string;
   location: string;
   buttonCount: ButtonCount;
+  buttonLayout?: ButtonLayout;
   brand: string;
   model: string;
+  modelId?: string;
+  selectedColorId?: string;
+  selectedButtonColors?: Record<number, string>;
+  selectedEngravingMethod?: EngravingMethod;
   finish: string;
   quantity: number;
   notes: string;
   buttons: KeypadButton[];
+  // BOQ change state
+  boqChange?: BOQChangeType;
 }
 
 // ─── Room ─────────────────────────────────────────────────────────────────────
@@ -75,6 +150,7 @@ export interface EngravingRoom {
   notes: string;
   keypads: Keypad[];
   order: number;
+  boqChange?: BOQChangeType;
 }
 
 // ─── Project ──────────────────────────────────────────────────────────────────
@@ -94,6 +170,7 @@ export interface EngravingProject {
   createdAt: string;
   updatedAt: string;
   boqProjectId?: string;
+  boqSnapshot?: BOQSnapshot;
 }
 
 // ─── Scene Library ────────────────────────────────────────────────────────────

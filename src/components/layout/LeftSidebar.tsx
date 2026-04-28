@@ -1,11 +1,17 @@
 import { useState } from 'react';
-import { Plus, ChevronDown, ChevronRight, Layers, LayoutGrid, Trash2 } from 'lucide-react';
+import { Plus, ChevronDown, ChevronRight, Layers, LayoutGrid, Trash2, X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useStore } from '../../store/useStore';
 import { RoomFormModal } from '../features/RoomFormModal';
 import { KeypadFormModal } from '../features/KeypadFormModal';
 
-export function LeftSidebar() {
+interface Props {
+  /** Mobile: controlled open state */
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+}
+
+export function LeftSidebar({ mobileOpen, onMobileClose }: Props) {
   const {
     activeProject, activeProjectId, activeRoomId, activeKeypadId,
     setActiveRoom, setActiveKeypad, removeRoom, removeKeypad,
@@ -31,21 +37,29 @@ export function LeftSidebar() {
     setActiveRoom(roomId);
     const room = project.rooms.find(r => r.id === roomId);
     if (room?.keypads[0]) setActiveKeypad(room.keypads[0].id);
+    onMobileClose?.();
   };
 
-  return (
-    <>
-      <div className="w-[240px] min-w-[240px] flex flex-col h-full bg-[#0f1117] border-r border-[rgba(255,255,255,0.06)]">
+  const handleSelectKeypad = (roomId: string, keypadId: string) => {
+    setActiveRoom(roomId);
+    setActiveKeypad(keypadId);
+    onMobileClose?.();
+  };
+
+  const sidebarContent = (
+    <div className="w-[240px] min-w-[240px] flex flex-col h-full bg-[#0f1117] border-r border-[rgba(255,255,255,0.06)]">
         {/* Header */}
         <div className="px-4 py-3 border-b border-[rgba(255,255,255,0.06)] flex items-center justify-between">
           <span className="label mb-0">Rooms & Keypads</span>
-          <button
-            onClick={() => setShowRoomModal(true)}
-            className="p-1 rounded hover:bg-[rgba(255,255,255,0.06)] text-[#565a72] hover:text-[#6366f1] transition-colors"
-            title="Add Room"
-          >
-            <Plus size={14} />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setShowRoomModal(true)}
+              className="p-1 rounded hover:bg-[rgba(255,255,255,0.06)] text-[#565a72] hover:text-[#6366f1] transition-colors"
+              title="Add Room"
+            >
+              <Plus size={14} />
+            </button>
+          </div>
         </div>
 
         {/* Tree */}
@@ -107,7 +121,7 @@ export function LeftSidebar() {
                   {room.keypads.map(kp => (
                     <div
                       key={kp.id}
-                      onClick={() => { setActiveRoom(room.id); setActiveKeypad(kp.id); }}
+                      onClick={() => handleSelectKeypad(room.id, kp.id)}
                       className={clsx(
                         'group flex items-center gap-1.5 px-3 py-1.5 cursor-pointer rounded-sm mx-1',
                         activeKeypadId === kp.id
@@ -149,6 +163,33 @@ export function LeftSidebar() {
           </p>
         </div>
       </div>
+  );
+
+  return (
+    <>
+      {/* Desktop: always visible */}
+      <div className="hidden md:flex h-full">{sidebarContent}</div>
+
+      {/* Mobile: slide-in drawer */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={onMobileClose}
+          />
+          {/* Drawer */}
+          <div className="relative z-10 flex h-full">
+            {sidebarContent}
+            <button
+              onClick={onMobileClose}
+              className="absolute top-3 right-3 p-1.5 rounded-lg bg-[rgba(255,255,255,0.08)] text-[#8b8fa8] hover:text-[#f0f1f3]"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        </div>
+      )}
 
       <RoomFormModal
         projectId={activeProjectId}

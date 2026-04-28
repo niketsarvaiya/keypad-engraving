@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Plus, LayoutGrid, Trash2, Upload, FileJson, Zap } from 'lucide-react';
+import { Plus, LayoutGrid, Trash2, Upload, FileJson, Zap, Database } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useStore } from '../store/useStore';
 import { StatusBadge, RevisionBadge } from '../components/ui/Badge';
@@ -9,7 +9,7 @@ import { createDemoProject } from '../lib/defaults';
 import type { BOQProject } from '../types';
 
 export function ProjectsPage() {
-  const { projects, openProject, removeProject, createProject } = useStore();
+  const { projects, openProject, removeProject, createProject, setView } = useStore();
   const [showNewModal, setShowNewModal] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -52,21 +52,29 @@ export function ProjectsPage() {
             <h1 className="text-[22px] font-bold text-[#f0f1f3] tracking-tight">Keypad Engraving</h1>
             <p className="text-[13px] text-[#8b8fa8] mt-0.5">Design, review, and export keypad engraving layouts</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={handleBOQImport} />
             <button
+              onClick={() => setView('repository')}
+              className="flex items-center gap-2 px-3 md:px-3.5 py-2 rounded-lg border border-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.06)] text-[#8b8fa8] hover:text-[#f0f1f3] text-[12px] md:text-[13px] font-medium transition-colors"
+            >
+              <Database size={14} />
+              <span className="hidden sm:inline">Repository</span>
+            </button>
+            <button
               onClick={() => fileRef.current?.click()}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.06)] text-[#8b8fa8] hover:text-[#f0f1f3] text-[13px] font-medium transition-colors"
+              className="flex items-center gap-2 px-3 md:px-3.5 py-2 rounded-lg border border-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.06)] text-[#8b8fa8] hover:text-[#f0f1f3] text-[12px] md:text-[13px] font-medium transition-colors"
             >
               <Upload size={14} />
-              Import BOQ
+              <span className="hidden sm:inline">Import BOQ</span>
             </button>
             <button
               onClick={() => setShowNewModal(true)}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#6366f1] hover:bg-[#4f52e0] text-white text-[13px] font-medium transition-colors"
+              className="flex items-center gap-2 px-3 md:px-3.5 py-2 rounded-lg bg-[#6366f1] hover:bg-[#4f52e0] text-white text-[12px] md:text-[13px] font-medium transition-colors"
             >
               <Plus size={14} />
-              New Project
+              <span className="hidden sm:inline">New Project</span>
+              <span className="sm:hidden">New</span>
             </button>
           </div>
         </div>
