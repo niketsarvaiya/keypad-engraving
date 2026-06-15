@@ -857,3 +857,414 @@ export function createDemoProject2(): EngravingProject {
     ],
   };
 }
+
+// ─── Mr. & Mrs. Ruia Residence Demo Project ───────────────────────────────────
+
+export function createRuiaProject(): EngravingProject {
+  const now = new Date().toISOString();
+
+  const btn = (
+    pos: number,
+    label: string,
+    actionType: KeypadButton['actionType'],
+    opts: { notes?: string; icon?: string; engravingMode?: KeypadButton['engravingMode'] } = {},
+  ): KeypadButton => ({
+    id: generateId(),
+    position: pos,
+    label,
+    actionType,
+    engravingMode: opts.engravingMode ?? 'text',
+    icon: opts.icon,
+    notes: opts.notes ?? '',
+    comments: [],
+  });
+
+  // All keypads in this project use the Vibroxx Horizon 8-Button in Champagne Gold
+  const kpDefaults = {
+    brand: 'Vibroxx',
+    model: 'Horizon 8-Button',
+    modelId: SEED.VIBROXX_8.modelId,
+    selectedColorId: SEED.VIBROXX_8.colors.gold,
+    finish: 'Champagne Gold',
+    buttonCount: 8 as const,
+    quantity: 1,
+  };
+
+  return {
+    id: generateId(),
+    name: 'Mr. & Mrs. Ruia Residence',
+    client: 'Mr. & Mrs. Ruia',
+    projectCode: 'R01',
+    preparedBy: 'Beyond Alliance',
+    date: now.slice(0, 10),
+    revision: 1,
+    status: 'draft',
+    globalNotes: 'Duplex residence — 17th Floor & 18th Floor. All keypads: Vibroxx Horizon 8-Button, Champagne Gold finish. Fan assumed BLDC (single button). AC abbreviations: L.AC = Living Area, D.AC = Dining Area.',
+    settings: {
+      ...DEFAULT_SETTINGS,
+      keypayFinish: 'Champagne Gold',
+      printingColor: 'Black',
+      textCase: 'uppercase',
+    },
+
+    rooms: [
+
+      // ════════════════════════════════════════════════════════════
+      // 17TH FLOOR
+      // ════════════════════════════════════════════════════════════
+
+      // ── Double Height Balcony (4 buttons used) ───────────────────
+      {
+        id: generateId(),
+        name: '17F — Double Height Balcony',
+        type: 'Outdoor',
+        notes: '4 of 8 buttons used. Entry balcony with ambient and scene control.',
+        order: 1,
+        keypads: [
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Balcony Control',
+            location: 'Main Wall',
+            notes: 'Champagne Gold finish. 4 active buttons.',
+            buttons: [
+              btn(1, 'LIGHTS', 'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',    'Scene'),
+              btn(3, 'RELAX',  'Scene'),
+              btn(4, 'NIGHT',  'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+              btn(5, '',       'Empty'),
+              btn(6, '',       'Empty'),
+              btn(7, '',       'Empty'),
+              btn(8, '',       'Empty'),
+            ],
+          },
+        ],
+      },
+
+      // ── Living Area ──────────────────────────────────────────────
+      {
+        id: generateId(),
+        name: '17F — Living Area',
+        type: 'Living Room',
+        notes: 'Full 8-button layout. Dual fan control (Fan 1 / Fan 2). L.AC = Living Area AC.',
+        order: 2,
+        keypads: [
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Living Area Keypad',
+            location: 'Main Wall',
+            notes: 'Vibroxx Horizon 8-Button, Champagne Gold.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'AMBIENT', 'Scene'),
+              btn(4, 'LOUNGE',  'Scene'),
+              btn(5, 'FAN 1',   'Fan',    { engravingMode: 'text+icon', icon: 'Wind' }),
+              btn(6, 'FAN 2',   'Fan',    { engravingMode: 'text+icon', icon: 'Wind' }),
+              btn(7, 'L.AC',    'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Dining Area ──────────────────────────────────────────────
+      {
+        id: generateId(),
+        name: '17F — Dining Area',
+        type: 'Dining',
+        notes: 'Full 8-button layout. D.AC = Dining Area AC. Passage and Party scenes included.',
+        order: 3,
+        keypads: [
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Dining Area Keypad',
+            location: 'Main Wall',
+            notes: 'Vibroxx Horizon 8-Button, Champagne Gold.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'AMBIENT', 'Scene'),
+              btn(4, 'DINNER',  'Scene'),
+              btn(5, 'PASSAGE', 'Light'),
+              btn(6, 'PARTY',   'Scene'),
+              btn(7, 'D.AC',    'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Entrance Foyer & Staircase ───────────────────────────────
+      {
+        id: generateId(),
+        name: '17F — Entrance Foyer & Staircase',
+        type: 'Passage',
+        notes: 'Entry and staircase control keypad. Stairs and Passage lights separable.',
+        order: 4,
+        keypads: [
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Foyer & Staircase Keypad',
+            location: 'Near Door',
+            notes: 'Vibroxx Horizon 8-Button, Champagne Gold.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'AMBIENT', 'Scene'),
+              btn(4, 'RELAX',   'Scene'),
+              btn(5, 'STAIRS',  'Light'),
+              btn(6, 'PASSAGE', 'Light'),
+              btn(7, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Mrs. Ruia's Bedroom ──────────────────────────────────────
+      {
+        id: generateId(),
+        name: "17F — Mrs. Ruia's Bedroom",
+        type: 'Master Bedroom',
+        notes: 'Dual bedside keypads (Left & Right). Identical 8-button layout on both sides.',
+        order: 5,
+        keypads: [
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Left Bedside',
+            location: 'Bedside Left',
+            notes: 'Vibroxx Horizon 8-Button, Champagne Gold. Left bedside panel.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'AMBIENT', 'Scene'),
+              btn(4, 'RELAX',   'Scene'),
+              btn(5, 'FAN',     'Fan',    { engravingMode: 'text+icon', icon: 'Wind' }),
+              btn(6, 'EVENING', 'Scene',  { engravingMode: 'text+icon', icon: 'Sunset' }),
+              btn(7, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Right Bedside',
+            location: 'Bedside Right',
+            notes: 'Vibroxx Horizon 8-Button, Champagne Gold. Right bedside panel.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'AMBIENT', 'Scene'),
+              btn(4, 'RELAX',   'Scene'),
+              btn(5, 'FAN',     'Fan',    { engravingMode: 'text+icon', icon: 'Wind' }),
+              btn(6, 'EVENING', 'Scene',  { engravingMode: 'text+icon', icon: 'Sunset' }),
+              btn(7, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+        ],
+      },
+
+      // ════════════════════════════════════════════════════════════
+      // 18TH FLOOR
+      // ════════════════════════════════════════════════════════════
+
+      // ── Master Bedroom ───────────────────────────────────────────
+      {
+        id: generateId(),
+        name: '18F — Master Bedroom',
+        type: 'Master Bedroom',
+        notes: 'Dual bedside keypads. Right side includes READ instead of AMBIENT for reading lamp.',
+        order: 6,
+        keypads: [
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Left Bedside',
+            location: 'Bedside Left',
+            notes: 'Vibroxx Horizon 8-Button, Champagne Gold. Left bedside panel.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'AMBIENT', 'Scene'),
+              btn(4, 'RELAX',   'Scene'),
+              btn(5, 'FAN',     'Fan',    { engravingMode: 'text+icon', icon: 'Wind' }),
+              btn(6, 'EVENING', 'Scene',  { engravingMode: 'text+icon', icon: 'Sunset' }),
+              btn(7, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Right Bedside',
+            location: 'Bedside Right',
+            notes: 'Right side — READ replaces AMBIENT for reading light control.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'READ',    'Light',  { engravingMode: 'text+icon', icon: 'BookOpen' }),
+              btn(4, 'RELAX',   'Scene'),
+              btn(5, 'FAN',     'Fan',    { engravingMode: 'text+icon', icon: 'Wind' }),
+              btn(6, 'EVENING', 'Scene',  { engravingMode: 'text+icon', icon: 'Sunset' }),
+              btn(7, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Aaliya's Bedroom ─────────────────────────────────────────
+      {
+        id: generateId(),
+        name: "18F — Aaliya's Bedroom",
+        type: 'Bedroom',
+        notes: 'Dual bedside keypads. STUDY and READ scenes for study-focused layout.',
+        order: 7,
+        keypads: [
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Left Bedside',
+            location: 'Bedside Left',
+            notes: 'Vibroxx Horizon 8-Button, Champagne Gold.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'STUDY',   'Scene'),
+              btn(4, 'READ',    'Light',  { engravingMode: 'text+icon', icon: 'BookOpen' }),
+              btn(5, 'FAN',     'Fan',    { engravingMode: 'text+icon', icon: 'Wind' }),
+              btn(6, 'EVENING', 'Scene',  { engravingMode: 'text+icon', icon: 'Sunset' }),
+              btn(7, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Right Bedside',
+            location: 'Bedside Right',
+            notes: 'Vibroxx Horizon 8-Button, Champagne Gold.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'STUDY',   'Scene'),
+              btn(4, 'READ',    'Light',  { engravingMode: 'text+icon', icon: 'BookOpen' }),
+              btn(5, 'FAN',     'Fan',    { engravingMode: 'text+icon', icon: 'Wind' }),
+              btn(6, 'EVENING', 'Scene',  { engravingMode: 'text+icon', icon: 'Sunset' }),
+              btn(7, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Anaaya's Bedroom ─────────────────────────────────────────
+      {
+        id: generateId(),
+        name: "18F — Anaaya's Bedroom",
+        type: 'Bedroom',
+        notes: 'Dual bedside keypads. STUDY + RELAX combo for young resident.',
+        order: 8,
+        keypads: [
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Left Bedside',
+            location: 'Bedside Left',
+            notes: 'Vibroxx Horizon 8-Button, Champagne Gold.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'STUDY',   'Scene'),
+              btn(4, 'RELAX',   'Scene'),
+              btn(5, 'FAN',     'Fan',    { engravingMode: 'text+icon', icon: 'Wind' }),
+              btn(6, 'EVENING', 'Scene',  { engravingMode: 'text+icon', icon: 'Sunset' }),
+              btn(7, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Right Bedside',
+            location: 'Bedside Right',
+            notes: 'Vibroxx Horizon 8-Button, Champagne Gold.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'STUDY',   'Scene'),
+              btn(4, 'RELAX',   'Scene'),
+              btn(5, 'FAN',     'Fan',    { engravingMode: 'text+icon', icon: 'Wind' }),
+              btn(6, 'EVENING', 'Scene',  { engravingMode: 'text+icon', icon: 'Sunset' }),
+              btn(7, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Lounge Room ──────────────────────────────────────────────
+      {
+        id: generateId(),
+        name: '18F — Lounge Room',
+        type: 'Lounge',
+        notes: 'Full 8-button control. Stairs and Passage from this floor. Lounge scene.',
+        order: 9,
+        keypads: [
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Lounge Keypad',
+            location: 'Main Wall',
+            notes: 'Vibroxx Horizon 8-Button, Champagne Gold.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'FAV',     'Scene'),
+              btn(3, 'STAIRS',  'Light'),
+              btn(4, 'PASSAGE', 'Light'),
+              btn(5, 'FAN',     'Fan',    { engravingMode: 'text+icon', icon: 'Wind' }),
+              btn(6, 'LOUNGE',  'Scene'),
+              btn(7, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Staircase Lobby (Near Staff Area) ───────────────────────
+      {
+        id: generateId(),
+        name: '18F — Staircase Lobby',
+        type: 'Passage',
+        notes: '4 of 8 buttons used. Minimal lobby control at staff/staircase level.',
+        order: 10,
+        keypads: [
+          {
+            ...kpDefaults,
+            id: generateId(),
+            name: 'Staircase Lobby Keypad',
+            location: 'Near Door',
+            notes: 'Champagne Gold. 4 active buttons — lobby-level minimal control.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'PASSAGE', 'Light'),
+              btn(3, 'STAIRS',  'Light'),
+              btn(4, 'NIGHT',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+              btn(5, '',        'Empty'),
+              btn(6, '',        'Empty'),
+              btn(7, '',        'Empty'),
+              btn(8, '',        'Empty'),
+            ],
+          },
+        ],
+      },
+
+    ],
+  };
+}

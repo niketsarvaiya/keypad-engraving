@@ -100,6 +100,10 @@ export const SEED = {
     modelId: 'seed-vibroxx-4',
     colors: { white: 'seed-vib-white', black: 'seed-vib-black' },
   },
+  VIBROXX_8: {
+    modelId: 'seed-vibroxx-8',
+    colors: { gold: 'seed-vib8-gold', white: 'seed-vib8-white', black: 'seed-vib8-black' },
+  },
 } as const;
 
 // ─── Seed model definitions ────────────────────────────────────────────────────
@@ -523,6 +527,27 @@ export const SEED_MODELS: KeypadModel[] = [
     notes: 'Vibroxx 4-button keypad. White and Black finish.',
     createdAt: T, updatedAt: T,
   },
+
+  // ── Vibroxx Horizon 8-Button ─────────────────────────────────────────────────
+  {
+    id: SEED.VIBROXX_8.modelId,
+    brand: 'Vibroxx',
+    modelNumber: 'Horizon-8',
+    name: 'Horizon 8-Button',
+    buttonCount: 8,
+    buttonLayout: { rows: 4, cols: 2 },
+    colors: [
+      { id: SEED.VIBROXX_8.colors.gold,  name: 'Champagne Gold', hex: '#c8a96e' },
+      { id: SEED.VIBROXX_8.colors.white, name: 'Pearl White',    hex: '#f5f5f5' },
+      { id: SEED.VIBROXX_8.colors.black, name: 'Matte Black',    hex: '#1c1c1e' },
+    ],
+    hasButtonColors: false, buttonColors: [],
+    indicator: 'backlit',
+    engravingMethods: ['print', 'laser'],
+    material: 'glass',
+    notes: 'Vibroxx Horizon 8-button. Signature Champagne Gold finish with backlit indicators. Print and laser engraving. Ideal for luxury duplex and penthouse installations.',
+    createdAt: T, updatedAt: T,
+  },
 ];
 
 // ─── Seed helper ──────────────────────────────────────────────────────────────
@@ -530,35 +555,33 @@ export const SEED_MODELS: KeypadModel[] = [
 const REPO_KEY = 'engraving_repository';
 
 /**
- * Seeds the repository with default models if it has never been populated.
- * Checks for a version flag so re-opens on an existing device don't re-seed
- * if the user has since added or removed models.
+ * Seeds the repository with default models on every load.
+ * Safe: never overwrites existing user-added models — only adds any seed models
+ * that are missing by ID. This means new models added to SEED_MODELS are picked
+ * up automatically on the next app load.
  */
 export function seedRepositoryIfEmpty(): KeypadModel[] {
   try {
     const raw = localStorage.getItem(REPO_KEY);
-    const seeded = localStorage.getItem('engraving_repo_seeded_v1');
 
     if (!raw || raw === '[]') {
       // First time — seed everything
       localStorage.setItem(REPO_KEY, JSON.stringify(SEED_MODELS));
-      localStorage.setItem('engraving_repo_seeded_v1', '1');
       return [...SEED_MODELS];
     }
 
-    if (!seeded) {
-      // Repository has data (user may have added models pre-seed) — merge in seed models
-      // without overwriting existing entries
-      const existing: KeypadModel[] = JSON.parse(raw);
-      const existingIds = new Set(existing.map(m => m.id));
-      const toAdd = SEED_MODELS.filter(m => !existingIds.has(m.id));
+    // Always check for any missing seed models and add them (never overwrites)
+    const existing: KeypadModel[] = JSON.parse(raw);
+    const existingIds = new Set(existing.map(m => m.id));
+    const toAdd = SEED_MODELS.filter(m => !existingIds.has(m.id));
+
+    if (toAdd.length > 0) {
       const merged = [...existing, ...toAdd];
       localStorage.setItem(REPO_KEY, JSON.stringify(merged));
-      localStorage.setItem('engraving_repo_seeded_v1', '1');
       return merged;
     }
 
-    return JSON.parse(raw) as KeypadModel[];
+    return existing;
   } catch {
     return [];
   }

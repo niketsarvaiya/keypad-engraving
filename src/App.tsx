@@ -5,7 +5,7 @@ import { ProjectsPage } from './pages/ProjectsPage';
 import { EditorPage } from './pages/EditorPage';
 import { ClientViewPage } from './pages/ClientViewPage';
 import { RepositoryPage } from './pages/RepositoryPage';
-import { createDemoProject2 } from './lib/defaults';
+import { createDemoProject2, createRuiaProject } from './lib/defaults';
 import { saveProject } from './lib/storage';
 
 export default function App() {
@@ -20,7 +20,12 @@ export default function App() {
       saveProject(demo2);
       localStorage.setItem('engraving_demo2_seeded', '1');
     }
-    // Hydrate repository (auto-seeds all 20 keypad models on first visit)
+    if (!localStorage.getItem('engraving_ruia_seeded')) {
+      const ruia = createRuiaProject();
+      saveProject(ruia);
+      localStorage.setItem('engraving_ruia_seeded', '1');
+    }
+    // Hydrate repository (auto-seeds models on first visit, adds new ones on subsequent visits)
     hydrateRepo();
     // Hydrate projects from localStorage
     hydrate();
