@@ -12,6 +12,7 @@ import type {
   KeypadButton, ButtonCount, GlobalEngravingSettings,
   EngravingProject, SceneLibraryItem
 } from '../types';
+import { SEED } from './repositorySeed';
 
 // ─── Icon Library ─────────────────────────────────────────────────────────────
 
@@ -500,6 +501,351 @@ export function createDemoProject(): EngravingProject {
             buttonCount: 2,
             brand: 'Basalte', model: 'Sentido', finish: 'Chime Brown', quantity: 1,
             notes: '',
+            buttons: [
+              btn(1, 'WELCOME', 'Scene'),
+              btn(2, 'ALL OFF', 'Master', { engravingMode: 'text+icon', icon: 'Power' }),
+            ],
+          },
+        ],
+      },
+
+    ],
+  };
+}
+
+// ─── Demo Project 2 — Skyline Penthouse ──────────────────────────────────────
+// Uses real keypad models from the Beyond Alliance repository (stable seed IDs).
+// Each room showcases a different brand/finish combination.
+
+export function createDemoProject2(): EngravingProject {
+  const now = new Date().toISOString();
+
+  const btn = (
+    pos: number,
+    label: string,
+    actionType: KeypadButton['actionType'],
+    opts: { notes?: string; icon?: string; engravingMode?: KeypadButton['engravingMode']; comments?: KeypadButton['comments'] } = {},
+  ): KeypadButton => ({
+    id: generateId(),
+    position: pos,
+    label,
+    actionType,
+    engravingMode: opts.engravingMode ?? 'text',
+    icon: opts.icon,
+    notes: opts.notes ?? '',
+    comments: opts.comments ?? [],
+  });
+
+  return {
+    id: generateId(),
+    name: 'Skyline Penthouse',
+    client: 'Mr. & Mrs. Kapoor',
+    projectCode: 'BYA-2025-021',
+    preparedBy: 'Beyond Alliance',
+    date: now.slice(0, 10),
+    revision: 1,
+    globalNotes: 'Mixed brand project — keypads sourced from EAE, Black Nova, Citron, Lutron and more. Refer to individual room notes for finish details.',
+    settings: { ...DEFAULT_SETTINGS, textCase: 'uppercase', useIcons: true },
+    status: 'draft',
+    createdAt: now,
+    updatedAt: now,
+    rooms: [
+
+      // ── Living Room · EAE Oria 8-Button, Champagne
+      {
+        id: generateId(), name: 'Living Room', type: 'Living Room',
+        notes: 'EAE Oria 4-Fold in Champagne finish. Feature wall placement.',
+        order: 0,
+        keypads: [
+          {
+            id: generateId(),
+            name: 'Main Control',
+            location: 'Main Wall',
+            buttonCount: 8,
+            brand: 'EAE',
+            model: 'Oria 4-Fold',
+            modelId: SEED.EAE_ORIA_8.modelId,
+            selectedColorId: SEED.EAE_ORIA_8.colors.champagne,
+            finish: 'Champagne',
+            quantity: 1,
+            notes: 'EAE Oria 4-Fold, Champagne finish. Feature wall adjacent to entrance.',
+            buttons: [
+              btn(1, 'LIGHTS',   'Light',   { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'LOUNGE',   'Scene'),
+              btn(3, 'AMBIENT',  'Scene'),
+              btn(4, 'PARTY',    'Scene',   { engravingMode: 'text+icon', icon: 'Sparkles' }),
+              btn(5, 'CURTAINS', 'Curtain', { engravingMode: 'text+icon', icon: 'ChevronDown' }),
+              btn(6, 'MUSIC',    'Music',   { engravingMode: 'text+icon', icon: 'Music2' }),
+              btn(7, 'TV',       'Custom',  { engravingMode: 'text+icon', icon: 'Tv2' }),
+              btn(8, 'ALL OFF',  'Master',  { engravingMode: 'text+icon', icon: 'Power' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Dining · Citron Scenario Panel 8-Button, Glacier Gold
+      {
+        id: generateId(), name: 'Dining Room', type: 'Dining',
+        notes: 'Citron Scenario Panel in Glacier Gold — statement dining experience.',
+        order: 1,
+        keypads: [
+          {
+            id: generateId(),
+            name: 'Dining Keypad',
+            location: 'Main Wall',
+            buttonCount: 8,
+            brand: 'Citron',
+            model: 'Scenario Panel',
+            modelId: SEED.CITRON_8.modelId,
+            selectedColorId: SEED.CITRON_8.colors.gold,
+            finish: 'Glacier Gold',
+            quantity: 1,
+            notes: 'Citron Scenario Panel, Glacier Gold finish.',
+            buttons: [
+              btn(1, 'LIGHTS',    'Light'),
+              btn(2, 'BRIGHT',    'Scene'),
+              btn(3, 'DINNER',    'Scene',   { engravingMode: 'text+icon', icon: 'Sunrise' }),
+              btn(4, 'ROMANTIC',  'Scene'),
+              btn(5, 'AMBIENT',   'Scene'),
+              btn(6, 'CHANDELIER','Light'),
+              btn(7, 'CURTAINS',  'Curtain', { engravingMode: 'text+icon', icon: 'ChevronDown' }),
+              btn(8, 'ALL OFF',   'Master',  { engravingMode: 'text+icon', icon: 'Power' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Master Suite · I Luxus 8-Button, Pastel Sky
+      {
+        id: generateId(), name: 'Master Suite', type: 'Master Bedroom',
+        notes: 'I Luxus Pastel Sky — soft tone matching the interior palette.',
+        order: 2,
+        keypads: [
+          {
+            id: generateId(),
+            name: 'Entry Keypad',
+            location: 'Entry',
+            buttonCount: 4,
+            brand: 'I Luxus',
+            model: 'I Luxus 4-Button',
+            modelId: SEED.I_LUXUS_4.modelId,
+            selectedColorId: SEED.I_LUXUS_4.colors.sky,
+            finish: 'Pastel Sky',
+            quantity: 1,
+            notes: 'I Luxus 4-button, Pastel Sky. Entry control.',
+            buttons: [
+              btn(1, 'LIGHTS',   'Light'),
+              btn(2, 'RELAX',    'Scene'),
+              btn(3, 'CURTAINS', 'Curtain', { engravingMode: 'text+icon', icon: 'ChevronDown' }),
+              btn(4, 'ALL OFF',  'Master',  { engravingMode: 'text+icon', icon: 'Power' }),
+            ],
+          },
+          {
+            id: generateId(),
+            name: 'Bedside — Left',
+            location: 'Bedside Left',
+            buttonCount: 8,
+            brand: 'I Luxus',
+            model: 'I Luxus 8-Button',
+            modelId: SEED.I_LUXUS_8.modelId,
+            selectedColorId: SEED.I_LUXUS_8.colors.sky,
+            finish: 'Pastel Sky',
+            quantity: 1,
+            notes: 'His side. I Luxus 8-button, Pastel Sky.',
+            buttons: [
+              btn(1, 'MORNING',  'Scene',   { engravingMode: 'text+icon', icon: 'Sunrise' }),
+              btn(2, 'RELAX',    'Scene'),
+              btn(3, 'READING',  'Light',   { engravingMode: 'text+icon', icon: 'BookOpen' }),
+              btn(4, 'SLEEP',    'Scene',   { engravingMode: 'text+icon', icon: 'Moon' }),
+              btn(5, 'CURTAINS', 'Curtain', { engravingMode: 'text+icon', icon: 'ChevronDown' }),
+              btn(6, 'SHEER',    'Curtain'),
+              btn(7, 'AC',       'AC',      { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'ALL OFF',  'Master',  { engravingMode: 'text+icon', icon: 'Power' }),
+            ],
+          },
+          {
+            id: generateId(),
+            name: 'Bedside — Right',
+            location: 'Bedside Right',
+            buttonCount: 8,
+            brand: 'I Luxus',
+            model: 'I Luxus 8-Button',
+            modelId: SEED.I_LUXUS_8.modelId,
+            selectedColorId: SEED.I_LUXUS_8.colors.sky,
+            finish: 'Pastel Sky',
+            quantity: 1,
+            notes: 'Her side. I Luxus 8-button, Pastel Sky.',
+            buttons: [
+              btn(1, 'MORNING',  'Scene',   { engravingMode: 'text+icon', icon: 'Sunrise' }),
+              btn(2, 'RELAX',    'Scene'),
+              btn(3, 'READING',  'Light',   { engravingMode: 'text+icon', icon: 'BookOpen' }),
+              btn(4, 'NIGHT',    'Scene',   { engravingMode: 'text+icon', icon: 'Moon' }),
+              btn(5, 'CURTAINS', 'Curtain', { engravingMode: 'text+icon', icon: 'ChevronDown' }),
+              btn(6, 'BLACKOUT', 'Curtain'),
+              btn(7, 'AC',       'AC',      { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(8, 'ALL OFF',  'Master',  { engravingMode: 'text+icon', icon: 'Power' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Guest Bedroom · Lutron Pico 4-Button, Biscuit
+      {
+        id: generateId(), name: 'Guest Bedroom', type: 'Guest Bedroom',
+        notes: 'Lutron Pico wireless in Biscuit — warm neutral tones.',
+        order: 3,
+        keypads: [
+          {
+            id: generateId(),
+            name: 'Entry Keypad',
+            location: 'Entry',
+            buttonCount: 4,
+            brand: 'Lutron',
+            model: 'Pico 4-Button',
+            modelId: SEED.LUTRON_PICO_4.modelId,
+            selectedColorId: SEED.LUTRON_PICO_4.colors.bi,
+            finish: 'Biscuit',
+            quantity: 1,
+            notes: 'Lutron Pico, Biscuit finish. Wireless remote.',
+            buttons: [
+              btn(1, 'LIGHTS',   'Light'),
+              btn(2, 'WELCOME',  'Scene'),
+              btn(3, 'CURTAINS', 'Curtain', { engravingMode: 'text+icon', icon: 'ChevronDown' }),
+              btn(4, 'ALL OFF',  'Master',  { engravingMode: 'text+icon', icon: 'Power' }),
+            ],
+          },
+          {
+            id: generateId(),
+            name: 'Bedside Keypad',
+            location: 'Bedside Left',
+            buttonCount: 4,
+            brand: 'Lutron',
+            model: 'Pico 4-Button',
+            modelId: SEED.LUTRON_PICO_4.modelId,
+            selectedColorId: SEED.LUTRON_PICO_4.colors.bi,
+            finish: 'Biscuit',
+            quantity: 2,
+            notes: 'Qty 2 — one each side. Lutron Pico, Biscuit.',
+            buttons: [
+              btn(1, 'READING', 'Light',  { engravingMode: 'text+icon', icon: 'BookOpen' }),
+              btn(2, 'SLEEP',   'Scene',  { engravingMode: 'text+icon', icon: 'Moon' }),
+              btn(3, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(4, 'ALL OFF', 'Master', { engravingMode: 'text+icon', icon: 'Power' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Home Theatre · Black Nova ALBA 8, Nero Black
+      {
+        id: generateId(), name: 'Home Theatre', type: 'Theatre',
+        notes: 'Black Nova ALBA 8, Nero Black — dramatic finish for the theatre.',
+        order: 4,
+        keypads: [
+          {
+            id: generateId(),
+            name: 'Theatre Control',
+            location: 'Entry',
+            buttonCount: 8,
+            brand: 'Black Nova',
+            model: 'ALBA 8',
+            modelId: SEED.BLACK_NOVA_ALBA8.modelId,
+            selectedColorId: SEED.BLACK_NOVA_ALBA8.colors.black,
+            finish: 'Nero Black',
+            quantity: 1,
+            notes: 'Black Nova ALBA 8, Nero Black. Laser engraving via Black Nova creator tool.',
+            buttons: [
+              btn(1, 'MOVIE',     'Scene',   { engravingMode: 'text+icon', icon: 'Film' }),
+              btn(2, 'AMBIENT',   'Scene'),
+              btn(3, 'BRIGHT',    'Scene'),
+              btn(4, 'PROJECTOR', 'Custom',  { notes: 'Triggers projector + motorised screen.' }),
+              btn(5, 'TV',        'Custom',  { engravingMode: 'text+icon', icon: 'Tv2' }),
+              btn(6, 'BLACKOUT',  'Curtain', { notes: 'Blackout only — no sheer in theatre.' }),
+              btn(7, 'MUSIC',     'Music',   { engravingMode: 'text+icon', icon: 'Music2' }),
+              btn(8, 'ALL OFF',   'Master',  { engravingMode: 'text+icon', icon: 'Power' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Kitchen · Eelectron Mini Pad 6-Button, White
+      {
+        id: generateId(), name: 'Kitchen', type: 'Kitchen',
+        notes: 'Eelectron Mini Pad 6-button, White — clean minimal kitchen control.',
+        order: 5,
+        keypads: [
+          {
+            id: generateId(),
+            name: 'Kitchen Keypad',
+            location: 'Main Wall',
+            buttonCount: 6,
+            brand: 'Eelectron',
+            model: 'Mini Pad CS10A01KNX',
+            modelId: SEED.EELECTRON_6.modelId,
+            selectedColorId: SEED.EELECTRON_6.colors.white,
+            finish: 'White',
+            quantity: 1,
+            notes: 'Eelectron Mini Pad, White. KNX protocol. Near service counter.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light',  { engravingMode: 'text+icon', icon: 'Sun' }),
+              btn(2, 'BRIGHT',  'Scene'),
+              btn(3, 'AMBIENT', 'Scene'),
+              btn(4, 'COVE',    'Light'),
+              btn(5, 'SPOTS',   'Light'),
+              btn(6, 'ALL OFF', 'Master', { engravingMode: 'text+icon', icon: 'Power' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Study · Crestron Cameo CBF 6-Button, White
+      {
+        id: generateId(), name: 'Study', type: 'Study',
+        notes: 'Crestron Cameo Flush 6-button, White.',
+        order: 6,
+        keypads: [
+          {
+            id: generateId(),
+            name: 'Study Keypad',
+            location: 'Main Wall',
+            buttonCount: 6,
+            brand: 'Crestron',
+            model: 'C2N-CBF-P-B-T',
+            modelId: SEED.CRESTRON_CBF_6.modelId,
+            selectedColorId: SEED.CRESTRON_CBF_6.colors.white,
+            finish: 'White',
+            quantity: 1,
+            notes: 'Crestron Cameo Flush, White. Side LED status indicators.',
+            buttons: [
+              btn(1, 'LIGHTS',  'Light'),
+              btn(2, 'BRIGHT',  'Scene'),
+              btn(3, 'READING', 'Light',  { engravingMode: 'text+icon', icon: 'BookOpen' }),
+              btn(4, 'FOCUS',   'Scene'),
+              btn(5, 'AC',      'AC',     { engravingMode: 'text+icon', icon: 'Thermometer' }),
+              btn(6, 'ALL OFF', 'Master', { engravingMode: 'text+icon', icon: 'Power' }),
+            ],
+          },
+        ],
+      },
+
+      // ── Foyer · EAE Oria 1-Fold (2-Button), White
+      {
+        id: generateId(), name: 'Foyer', type: 'Passage',
+        notes: 'EAE Oria 1-Fold 2-button in White — minimal entrance statement.',
+        order: 7,
+        keypads: [
+          {
+            id: generateId(),
+            name: 'Foyer Keypad',
+            location: 'Entry',
+            buttonCount: 2,
+            brand: 'EAE',
+            model: 'Oria 1-Fold',
+            modelId: SEED.EAE_ORIA_2.modelId,
+            selectedColorId: SEED.EAE_ORIA_2.colors.white,
+            finish: 'White',
+            quantity: 1,
+            notes: 'EAE Oria 1-Fold in White. Minimal foyer control point.',
             buttons: [
               btn(1, 'WELCOME', 'Scene'),
               btn(2, 'ALL OFF', 'Master', { engravingMode: 'text+icon', icon: 'Power' }),

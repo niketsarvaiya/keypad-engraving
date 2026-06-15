@@ -1,12 +1,10 @@
 import type { KeypadModel } from '../types';
+import { seedRepositoryIfEmpty } from './repositorySeed';
 
 const KEY = 'engraving_repository';
 
 export function loadModels(): KeypadModel[] {
-  try {
-    const raw = localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as KeypadModel[]) : [];
-  } catch { return []; }
+  return seedRepositoryIfEmpty();
 }
 
 export function saveModels(models: KeypadModel[]): void {

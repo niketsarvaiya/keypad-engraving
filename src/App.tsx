@@ -5,15 +5,27 @@ import { ProjectsPage } from './pages/ProjectsPage';
 import { EditorPage } from './pages/EditorPage';
 import { ClientViewPage } from './pages/ClientViewPage';
 import { RepositoryPage } from './pages/RepositoryPage';
+import { createDemoProject2 } from './lib/defaults';
+import { saveProject } from './lib/storage';
 
 export default function App() {
   const { view, hydrate, theme } = useStore();
   const { hydrate: hydrateRepo } = useRepositoryStore();
 
   useEffect(() => {
-    hydrate();
+    // Seed demo project 2 (Skyline Penthouse) BEFORE hydrating so it
+    // appears in the initial state on a fresh device / cleared localStorage
+    if (!localStorage.getItem('engraving_demo2_seeded')) {
+      const demo2 = createDemoProject2();
+      saveProject(demo2);
+      localStorage.setItem('engraving_demo2_seeded', '1');
+    }
+    // Hydrate repository (auto-seeds all 20 keypad models on first visit)
     hydrateRepo();
-  }, [hydrate, hydrateRepo]);
+    // Hydrate projects from localStorage
+    hydrate();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const html = document.documentElement;
