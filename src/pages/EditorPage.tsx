@@ -59,7 +59,7 @@ export function EditorPage() {
   const textCase = project.settings.textCase;
 
   const editorContent = (
-    <div className="flex-1 min-w-0 overflow-y-auto scrollbar-thin bg-[#0a0b0f] p-4 md:p-5 pb-20 md:pb-5">
+    <div className="flex-1 min-w-0 overflow-y-auto scrollbar-thin bg-base p-4 md:p-5 pb-20 md:pb-5">
       {!room ? (
         <div className="flex flex-col items-center justify-center h-full text-center">
           <LayoutGrid size={32} className="text-[#565a72] mb-3" />
@@ -146,12 +146,12 @@ export function EditorPage() {
             </div>
 
             {/* Mobile Library panel */}
-            <div className={`md:hidden flex-1 min-w-0 overflow-y-auto bg-[#0f1117] pb-20 ${mobilePanel === 'library' ? 'flex flex-col' : 'hidden'}`}>
+            <div className={`md:hidden flex-1 min-w-0 overflow-y-auto bg-panel pb-20 ${mobilePanel === 'library' ? 'flex flex-col' : 'hidden'}`}>
               <SceneLibrary />
             </div>
 
             {/* Mobile Properties panel */}
-            <div className={`md:hidden flex-1 min-w-0 overflow-y-auto bg-[#0f1117] pb-20 ${mobilePanel === 'properties' ? 'flex flex-col' : 'hidden'}`}>
+            <div className={`md:hidden flex-1 min-w-0 overflow-y-auto bg-panel pb-20 ${mobilePanel === 'properties' ? 'flex flex-col' : 'hidden'}`}>
               <div className="flex flex-col gap-0">
                 <KeypadColorPanel />
                 <div className="border-t border-[rgba(255,255,255,0.06)] mt-2">

@@ -1,105 +1,114 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────
+   BEYOND FINESSE · KEYPAD ENGRAVING
+   Design token system — light-first, Apple-adjacent warmth
+   ───────────────────────────────────────────────────────── */
+
 @theme {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
-
-  --color-accent:       #6366f1;
-  --color-accent-hover: #4f52e0;
-  --color-success:      #10b981;
-  --color-warning:      #f59e0b;
-  --color-critical:     #ef4444;
-  --color-info:         #3b82f6;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --color-accent: #6366f1;
 }
 
-/* ─── Dark theme (default) ─────────────────────── */
+/* ─── Light (default) ──────────────────────────────────────── */
 :root {
-  --color-surface-0: #0a0b0f;
-  --color-surface-1: #0f1117;
-  --color-surface-2: #161820;
-  --color-surface-3: #1e2028;
-  --color-surface-4: #252830;
+  /* Surfaces */
+  --bg:      #f5f5f7;   /* Apple page gray — content sits on this  */
+  --surface: #ffffff;   /* Cards, modals, inputs                   */
+  --panel:   #f2f2f4;   /* Sidebar, right panel, bottom nav        */
+  --raised:  #f8f8fa;   /* Slightly elevated within a surface      */
+  --pressed: #e8e8eb;   /* Active / pressed state                  */
 
-  --color-border:        rgba(255,255,255,0.06);
-  --color-border-strong: rgba(255,255,255,0.12);
+  /* Ink */
+  --ink:   #1d1d1f;     /* Apple near-black — primary text         */
+  --ink-2: #6e6e73;     /* Secondary text                          */
+  --ink-3: #aeaeb2;     /* Placeholder, muted labels               */
 
-  --color-text-primary:   #f0f1f3;
-  --color-text-secondary: #8b8fa8;
-  --color-text-muted:     #565a72;
+  /* Lines & dividers */
+  --line:        rgba(0, 0, 0, 0.08);
+  --line-strong: rgba(0, 0, 0, 0.14);
 
-  --color-accent-dim:   rgba(99,102,241,0.12);
-  --color-success-dim:  rgba(16,185,129,0.12);
-  --color-warning-dim:  rgba(245,158,11,0.12);
-  --color-critical-dim: rgba(239,68,68,0.12);
-  --color-info-dim:     rgba(59,130,246,0.12);
+  /* Brand accent — indigo */
+  --accent:      #6366f1;
+  --accent-h:    #4f52e0;
+  --accent-dim:  rgba(99, 102, 241, 0.10);
+  --accent-ring: rgba(99, 102, 241, 0.22);
 
-  --color-overlay:       rgba(255,255,255,0.06);
-  --color-overlay-hover: rgba(255,255,255,0.1);
+  /* Semantic tokens */
+  --ok:       #10b981;  --ok-dim:   rgba(16, 185, 129, 0.10);
+  --warn:     #f59e0b;  --warn-dim: rgba(245, 158, 11, 0.10);
+  --err:      #ef4444;  --err-dim:  rgba(239, 68, 68, 0.10);
+  --info:     #3b82f6;  --info-dim: rgba(59, 130, 246, 0.10);
 
-  color-scheme: dark;
-}
-
-/* ─── Light theme ──────────────────────────────── */
-html.light {
-  --color-surface-0: #eef0f5;
-  --color-surface-1: #f4f6fb;
-  --color-surface-2: #ffffff;
-  --color-surface-3: #f0f2f8;
-  --color-surface-4: #e8eaf2;
-
-  --color-border:        rgba(0,0,0,0.07);
-  --color-border-strong: rgba(0,0,0,0.13);
-
-  --color-text-primary:   #111318;
-  --color-text-secondary: #5a5e7a;
-  --color-text-muted:     #8b8fa8;
-
-  --color-accent-dim:   rgba(99,102,241,0.1);
-  --color-success-dim:  rgba(16,185,129,0.1);
-  --color-warning-dim:  rgba(245,158,11,0.1);
-  --color-critical-dim: rgba(239,68,68,0.1);
-  --color-info-dim:     rgba(59,130,246,0.1);
-
-  --color-overlay:       rgba(0,0,0,0.04);
-  --color-overlay-hover: rgba(0,0,0,0.08);
+  /* Overlay helpers */
+  --overlay:       rgba(0, 0, 0, 0.04);
+  --overlay-hover: rgba(0, 0, 0, 0.07);
 
   color-scheme: light;
 }
 
-/* ─── System theme — follows OS preference ─────── */
-@media (prefers-color-scheme: light) {
+/* ─── Dark ─────────────────────────────────────────────────── */
+html.dark {
+  --bg:      #0a0b0f;
+  --surface: #161820;
+  --panel:   #0f1117;
+  --raised:  #1e2028;
+  --pressed: #252830;
+
+  --ink:   #f0f1f3;
+  --ink-2: #8b8fa8;
+  --ink-3: #565a72;
+
+  --line:        rgba(255, 255, 255, 0.07);
+  --line-strong: rgba(255, 255, 255, 0.13);
+
+  --accent-dim:  rgba(99, 102, 241, 0.14);
+  --accent-ring: rgba(99, 102, 241, 0.20);
+
+  --ok-dim:   rgba(16, 185, 129, 0.14);
+  --warn-dim: rgba(245, 158, 11, 0.14);
+  --err-dim:  rgba(239, 68, 68, 0.14);
+  --info-dim: rgba(59, 130, 246, 0.14);
+
+  --overlay:       rgba(255, 255, 255, 0.04);
+  --overlay-hover: rgba(255, 255, 255, 0.08);
+
+  color-scheme: dark;
+}
+
+/* ─── System: follows OS dark preference ────────────────────── */
+@media (prefers-color-scheme: dark) {
   html.system {
-    --color-surface-0: #eef0f5;
-    --color-surface-1: #f4f6fb;
-    --color-surface-2: #ffffff;
-    --color-surface-3: #f0f2f8;
-    --color-surface-4: #e8eaf2;
+    --bg:      #0a0b0f;
+    --surface: #161820;
+    --panel:   #0f1117;
+    --raised:  #1e2028;
+    --pressed: #252830;
 
-    --color-border:        rgba(0,0,0,0.07);
-    --color-border-strong: rgba(0,0,0,0.13);
+    --ink:   #f0f1f3;
+    --ink-2: #8b8fa8;
+    --ink-3: #565a72;
 
-    --color-text-primary:   #111318;
-    --color-text-secondary: #5a5e7a;
-    --color-text-muted:     #8b8fa8;
+    --line:        rgba(255, 255, 255, 0.07);
+    --line-strong: rgba(255, 255, 255, 0.13);
 
-    --color-accent-dim:   rgba(99,102,241,0.1);
-    --color-success-dim:  rgba(16,185,129,0.1);
-    --color-warning-dim:  rgba(245,158,11,0.1);
-    --color-critical-dim: rgba(239,68,68,0.1);
-    --color-info-dim:     rgba(59,130,246,0.1);
+    --accent-dim:  rgba(99, 102, 241, 0.14);
+    --accent-ring: rgba(99, 102, 241, 0.20);
 
-    --color-overlay:       rgba(0,0,0,0.04);
-    --color-overlay-hover: rgba(0,0,0,0.08);
+    --ok-dim:   rgba(16, 185, 129, 0.14);
+    --warn-dim: rgba(245, 158, 11, 0.14);
+    --err-dim:  rgba(239, 68, 68, 0.14);
+    --info-dim: rgba(59, 130, 246, 0.14);
 
-    color-scheme: light;
+    --overlay:       rgba(255, 255, 255, 0.04);
+    --overlay-hover: rgba(255, 255, 255, 0.08);
+
+    color-scheme: dark;
   }
 }
 
-/* ─── Base ─────────────────────────────────────── */
+/* ─── Base ─────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
 
@@ -113,173 +122,221 @@ html.light {
   body {
     margin: 0;
     padding: 0;
-    background-color: var(--color-surface-0);
-    color: var(--color-text-primary);
+    background-color: var(--bg);
+    color: var(--ink);
     font-family: var(--font-sans);
     line-height: 1.5;
     overflow-x: hidden;
   }
 
-  #root {
-    width: 100%;
-    min-height: 100svh;
+  #root { width: 100%; min-height: 100svh; }
+
+  ::selection {
+    background: var(--accent-dim);
+    color: var(--accent);
   }
 }
 
-/* ─── Utilities ────────────────────────────────── */
+/* ─── Semantic utility classes ─────────────────────────────── */
 @layer utilities {
+
+  /* Surfaces */
+  .bg-base    { background-color: var(--bg); }
+  .bg-surface { background-color: var(--surface); }
+  .bg-panel   { background-color: var(--panel); }
+  .bg-raised  { background-color: var(--raised); }
+  .bg-pressed { background-color: var(--pressed); }
+
+  /* Text */
+  .text-ink   { color: var(--ink); }
+  .text-ink-2 { color: var(--ink-2); }
+  .text-ink-3 { color: var(--ink-3); }
+
+  /* Lines */
+  .border-line        { border-color: var(--line); }
+  .border-line-strong { border-color: var(--line-strong); }
+
+  /* Accent */
+  .bg-accent      { background-color: var(--accent); }
+  .bg-accent-dim  { background-color: var(--accent-dim); }
+  .text-accent    { color: var(--accent); }
+  .border-accent  { border-color: var(--accent); }
+
+  /* ── Cards ───────────────────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+
+  .card-raised {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+
+  /* Legacy alias — keep for modals/dropdowns */
+  .card-elevated {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+
+  /* ── Form controls ───────────────────────────────────────── */
+  .input-field {
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    color: var(--ink);
+    padding: 8px 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    width: 100%;
+    outline: none;
+    font-family: var(--font-sans);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .input-field::placeholder { color: var(--ink-3); }
+  .input-field:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-ring);
+  }
+
+  /* ── Label ───────────────────────────────────────────────── */
+  .label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+  }
+
+  /* ── Scrollbar ───────────────────────────────────────────── */
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-overlay-hover) transparent;
+    scrollbar-color: var(--line-strong) transparent;
   }
   .scrollbar-thin::-webkit-scrollbar { width: 4px; }
   .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: var(--color-overlay-hover);
-    border-radius: 2px;
+    background: var(--line-strong);
+    border-radius: 4px;
   }
 
-  .card {
-    background: var(--color-surface-2);
-    border: 1px solid var(--color-border);
-    border-radius: 14px;
-  }
-
-  .card-elevated {
-    background: var(--color-surface-3);
-    border: 1px solid var(--color-border);
-    border-radius: 14px;
-  }
-
-  .input-field {
-    background: var(--color-surface-1);
-    border: 1px solid var(--color-border-strong);
+  /* ── Icon button ─────────────────────────────────────────── */
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
     border-radius: 8px;
-    color: var(--color-text-primary);
-    padding: 8px 12px;
+    color: var(--ink-2);
+    transition: background 0.12s ease, color 0.12s ease;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+  }
+  .icon-btn:hover {
+    background: var(--overlay-hover);
+    color: var(--ink);
+  }
+
+  /* ── Pill button ─────────────────────────────────────────── */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
     font-size: 13px;
-    outline: none;
-    transition: border-color 0.15s ease;
-    width: 100%;
-    font-family: var(--font-sans);
-  }
-  .input-field:focus {
-    border-color: rgba(99,102,241,0.5);
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.08);
-  }
-  .input-field::placeholder { color: var(--color-text-muted); }
-
-  .label {
-    font-size: 11px;
     font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    margin-bottom: 5px;
-    display: block;
+    color: var(--ink-2);
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
   }
+  .btn-ghost:hover {
+    background: var(--overlay-hover);
+    color: var(--ink);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    transition: background 0.12s ease;
+  }
+  .btn-primary:hover { background: var(--accent-h); }
+
+  /* ── Overlay tints (legacy support, now theme-aware) ─────── */
+  .bg-overlay       { background-color: var(--overlay); }
+  .bg-overlay-hover { background-color: var(--overlay-hover); }
 }
 
-/* ─── Light/System: override hardcoded dark Tailwind classes ─── */
-html.light,
-html.system:where(@media (prefers-color-scheme: light)) {
-  /* intentional blank — overrides below handle it */
+/* ─── Dark mode: backward-compat overrides for old Tailwind hex classes ─── */
+/* Components not yet migrated to CSS vars still use hardcoded dark hex.     */
+/* These selectors flip them when in dark mode.                               */
+
+html:not(.dark):not(.system) [class*="bg-[#0a0b0f]"]  { background-color: var(--bg) !important; }
+html:not(.dark):not(.system) [class*="bg-[#0f1117]"]  { background-color: var(--panel) !important; }
+html:not(.dark):not(.system) [class*="bg-[#161820]"]  { background-color: var(--surface) !important; }
+html:not(.dark):not(.system) [class*="bg-[#1e2028]"]  { background-color: var(--raised) !important; }
+html:not(.dark):not(.system) [class*="bg-[#252830]"]  { background-color: var(--pressed) !important; }
+
+html:not(.dark):not(.system) [class*="text-[#f0f1f3]"] { color: var(--ink) !important; }
+html:not(.dark):not(.system) [class*="text-[#8b8fa8]"] { color: var(--ink-2) !important; }
+html:not(.dark):not(.system) [class*="text-[#565a72]"] { color: var(--ink-3) !important; }
+
+html:not(.dark):not(.system) [class*="hover:text-[#f0f1f3]"]:hover { color: var(--ink) !important; }
+html:not(.dark):not(.system) [class*="hover:text-[#8b8fa8]"]:hover { color: var(--ink-2) !important; }
+
+html:not(.dark):not(.system) [class*="border-[rgba(255,255,255,0.06)]"]  { border-color: var(--line) !important; }
+html:not(.dark):not(.system) [class*="border-[rgba(255,255,255,0.08)]"]  { border-color: var(--line) !important; }
+html:not(.dark):not(.system) [class*="border-[rgba(255,255,255,0.1)]"]   { border-color: var(--line-strong) !important; }
+html:not(.dark):not(.system) [class*="border-[rgba(255,255,255,0.12)]"]  { border-color: var(--line-strong) !important; }
+html:not(.dark):not(.system) [class*="border-[rgba(255,255,255,0.15)]"]  { border-color: var(--line-strong) !important; }
+
+html:not(.dark):not(.system) [class*="bg-[rgba(255,255,255,0.03)]"]:not([class*="hover:"]) { background-color: rgba(0,0,0,0.02) !important; }
+html:not(.dark):not(.system) [class*="bg-[rgba(255,255,255,0.04)]"]:not([class*="hover:"]) { background-color: rgba(0,0,0,0.03) !important; }
+html:not(.dark):not(.system) [class*="bg-[rgba(255,255,255,0.06)]"]:not([class*="hover:"]) { background-color: rgba(0,0,0,0.04) !important; }
+html:not(.dark):not(.system) [class*="bg-[rgba(255,255,255,0.07)]"]:not([class*="hover:"]) { background-color: rgba(0,0,0,0.05) !important; }
+html:not(.dark):not(.system) [class*="bg-[rgba(255,255,255,0.08)]"]:not([class*="hover:"]) { background-color: rgba(0,0,0,0.05) !important; }
+
+html:not(.dark):not(.system) [class*="hover:bg-[rgba(255,255,255,0.06)]"]:hover { background-color: var(--overlay-hover) !important; }
+html:not(.dark):not(.system) [class*="hover:bg-[rgba(255,255,255,0.04)]"]:hover { background-color: var(--overlay) !important; }
+
+/* Scrollbar in light */
+html:not(.dark):not(.system) .scrollbar-thin {
+  scrollbar-color: rgba(0,0,0,0.12) transparent;
+}
+html:not(.dark):not(.system) .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.12);
 }
 
-/* Surface backgrounds */
-html.light [class*="bg-[#0a0b0f]"],
-html.system [class*="bg-[#0a0b0f]"] { background-color: var(--color-surface-0) !important; }
-
-html.light [class*="bg-[#0f1117]"],
-html.system [class*="bg-[#0f1117]"] { background-color: var(--color-surface-1) !important; }
-
-html.light [class*="bg-[#161820]"],
-html.system [class*="bg-[#161820]"] { background-color: var(--color-surface-2) !important; }
-
-html.light [class*="bg-[#1e2028]"],
-html.system [class*="bg-[#1e2028]"] { background-color: var(--color-surface-3) !important; }
-
-html.light [class*="bg-[#252830]"],
-html.system [class*="bg-[#252830]"] { background-color: var(--color-surface-4) !important; }
-
-/* White overlay backgrounds → black overlay */
-html.light [class*="bg-[rgba(255,255,255,0.03)]"],
-html.system [class*="bg-[rgba(255,255,255,0.03)]"] { background-color: rgba(0,0,0,0.02) !important; }
-
-html.light [class*="bg-[rgba(255,255,255,0.04)]"],
-html.system [class*="bg-[rgba(255,255,255,0.04)]"] { background-color: rgba(0,0,0,0.03) !important; }
-
-html.light [class*="bg-[rgba(255,255,255,0.06)]"]:not([class*="hover:"]),
-html.system [class*="bg-[rgba(255,255,255,0.06)]"]:not([class*="hover:"]) { background-color: rgba(0,0,0,0.04) !important; }
-
-html.light [class*="bg-[rgba(255,255,255,0.07)]"]:not([class*="hover:"]),
-html.system [class*="bg-[rgba(255,255,255,0.07)]"]:not([class*="hover:"]) { background-color: rgba(0,0,0,0.05) !important; }
-
-html.light [class*="bg-[rgba(255,255,255,0.08)]"]:not([class*="hover:"]),
-html.system [class*="bg-[rgba(255,255,255,0.08)]"]:not([class*="hover:"]) { background-color: rgba(0,0,0,0.05) !important; }
-
-/* Hover state overrides */
-html.light [class*="hover:bg-[rgba(255,255,255,0.06)]"]:hover,
-html.system [class*="hover:bg-[rgba(255,255,255,0.06)]"]:hover { background-color: rgba(0,0,0,0.05) !important; }
-
-html.light [class*="hover:bg-[rgba(255,255,255,0.04)]"]:hover,
-html.system [class*="hover:bg-[rgba(255,255,255,0.04)]"]:hover { background-color: rgba(0,0,0,0.03) !important; }
-
-/* Borders: white → black alpha */
-html.light [class*="border-[rgba(255,255,255,0.06)]"],
-html.system [class*="border-[rgba(255,255,255,0.06)]"] { border-color: rgba(0,0,0,0.07) !important; }
-
-html.light [class*="border-[rgba(255,255,255,0.08)]"],
-html.system [class*="border-[rgba(255,255,255,0.08)]"] { border-color: rgba(0,0,0,0.09) !important; }
-
-html.light [class*="border-[rgba(255,255,255,0.1)]"],
-html.system [class*="border-[rgba(255,255,255,0.1)]"] { border-color: rgba(0,0,0,0.1) !important; }
-
-html.light [class*="border-[rgba(255,255,255,0.12)]"],
-html.system [class*="border-[rgba(255,255,255,0.12)]"] { border-color: rgba(0,0,0,0.12) !important; }
-
-html.light [class*="border-[rgba(255,255,255,0.15)]"],
-html.system [class*="border-[rgba(255,255,255,0.15)]"] { border-color: rgba(0,0,0,0.15) !important; }
-
-/* Text: light → dark */
-html.light [class*="text-[#f0f1f3]"],
-html.system [class*="text-[#f0f1f3]"] { color: var(--color-text-primary) !important; }
-
-html.light [class*="text-[#8b8fa8]"],
-html.system [class*="text-[#8b8fa8]"] { color: var(--color-text-secondary) !important; }
-
-html.light [class*="text-[#565a72]"],
-html.system [class*="text-[#565a72]"] { color: var(--color-text-muted) !important; }
-
-/* Hover text */
-html.light [class*="hover:text-[#f0f1f3]"]:hover,
-html.system [class*="hover:text-[#f0f1f3]"]:hover { color: var(--color-text-primary) !important; }
-
-html.light [class*="hover:text-[#8b8fa8]"]:hover,
-html.system [class*="hover:text-[#8b8fa8]"]:hover { color: var(--color-text-secondary) !important; }
-
-/* Scrollbar in light mode */
-html.light .scrollbar-thin,
-html.system .scrollbar-thin {
-  scrollbar-color: rgba(0,0,0,0.1) transparent;
-}
-html.light .scrollbar-thin::-webkit-scrollbar-thumb,
-html.system .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.1);
-}
-
-/* ─── Print styles ─────────────────────────────── */
+/* ─── Print ─────────────────────────────────────────────────── */
 @media print {
-  body {
-    background: #ffffff !important;
-    color: #0f1117 !important;
-  }
+  body { background: #fff !important; color: #1d1d1f !important; }
   .no-print { display: none !important; }
-  .print-only { display: block !important; }
   .print-page { page-break-after: always; }
 }
 
-/* ─── Theme transitions ─────────────────────────── */
+/* ─── Transitions ───────────────────────────────────────────── */
 *, *::before, *::after {
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.12s ease,
+    box-shadow 0.15s ease;
 }

@@ -15,31 +15,33 @@ export function RightPanel() {
     if (activeButtonId) setTab('properties');
   }, [activeButtonId]);
 
+  const TABS: { id: Tab; Icon: typeof Layers; label: string }[] = [
+    { id: 'library',    Icon: Layers,            label: 'Library' },
+    { id: 'properties', Icon: SlidersHorizontal, label: 'Properties' },
+    { id: 'finish',     Icon: Palette,           label: 'Finish' },
+  ];
+
   return (
-    <div className="hidden md:flex w-[260px] min-w-[260px] flex-col h-full bg-[#0f1117] border-l border-[rgba(255,255,255,0.06)]">
+    <div className="hidden md:flex w-[256px] min-w-[256px] flex-col h-full bg-panel border-l border-line">
       {/* Tab bar */}
-      <div className="flex border-b border-[rgba(255,255,255,0.06)]">
-        {([
-          { id: 'library'    as Tab, icon: Layers,            label: 'Library' },
-          { id: 'properties' as Tab, icon: SlidersHorizontal, label: 'Props' },
-          { id: 'finish'     as Tab, icon: Palette,           label: 'Finish' },
-        ] as const).map(t => (
+      <div className="flex border-b border-line px-2 pt-1">
+        {TABS.map(t => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`flex-1 flex items-center justify-center gap-1 py-3 text-[11px] font-medium transition-colors border-b-2 ${
+            className={[
+              'flex-1 flex flex-col items-center gap-1 py-2.5 text-[10px] font-semibold uppercase tracking-wider transition-colors rounded-t-lg',
               tab === t.id
-                ? 'text-[#6366f1] border-[#6366f1]'
-                : 'text-[#565a72] border-transparent hover:text-[#8b8fa8]'
-            }`}
+                ? 'text-accent border-b-2 border-accent'
+                : 'text-ink-3 border-b-2 border-transparent hover:text-ink-2',
+            ].join(' ')}
           >
-            <t.icon size={12} />
+            <t.Icon size={13} />
             {t.label}
           </button>
         ))}
       </div>
 
-      {/* Content */}
       <div className="flex-1 min-h-0 overflow-hidden">
         {tab === 'library'    && <SceneLibrary />}
         {tab === 'properties' && <ButtonProperties />}

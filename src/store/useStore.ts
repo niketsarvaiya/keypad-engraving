@@ -87,7 +87,7 @@ function mutateProject(
 
 export const useStore = create<EngravingStore>((set, get) => ({
   // ── Theme ─────────────────────────────────────────────────────────
-  theme: (localStorage.getItem('theme') as Theme) ?? 'dark',
+  theme: (localStorage.getItem('theme') as Theme) ?? 'light',
   setTheme: t => {
     localStorage.setItem('theme', t);
     set({ theme: t });

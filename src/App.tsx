@@ -17,8 +17,9 @@ export default function App() {
 
   useEffect(() => {
     const html = document.documentElement;
-    html.classList.remove('dark', 'light', 'system');
-    html.classList.add(theme);
+    // Light is the default (:root) — only apply a class for dark/system
+    html.classList.remove('dark', 'system');
+    if (theme === 'dark' || theme === 'system') html.classList.add(theme);
   }, [theme]);
 
   if (view === 'editor') return <EditorPage />;

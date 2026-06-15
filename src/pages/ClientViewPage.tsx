@@ -1,36 +1,10 @@
 import { ArrowLeft, Printer } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { useRepositoryStore } from '../store/useRepositoryStore';
-import { ICON_MAP } from '../lib/defaults';
-import type { Keypad, TextCase, EngravingMode } from '../types';
-
-// ─── Color helpers (same as KeypadVisual) ─────────────────────────────────────
-
-function getLuminance(hex: string): number {
-  const h = hex.replace('#', '');
-  const r = parseInt(h.substring(0, 2), 16) / 255;
-  const g = parseInt(h.substring(2, 4), 16) / 255;
-  const b = parseInt(h.substring(4, 6), 16) / 255;
-  return 0.299 * r + 0.587 * g + 0.114 * b;
-}
-
-function isDark(hex: string): boolean {
-  return getLuminance(hex) < 0.45;
-}
-
-function shiftBrightness(hex: string, amount: number): string {
-  const h = hex.replace('#', '');
-  const r = Math.min(255, Math.max(0, parseInt(h.substring(0, 2), 16) + amount));
-  const g = Math.min(255, Math.max(0, parseInt(h.substring(2, 4), 16) + amount));
-  const b = Math.min(255, Math.max(0, parseInt(h.substring(4, 6), 16) + amount));
-  return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
-}
-
-// ─── Main page ────────────────────────────────────────────────────────────────
 
 export function ClientViewPage() {
   const { activeProject, setView } = useStore();
-  const { models } = useRepositoryStore();
+  const { getModel } = useRepositoryStore();
   const project = activeProject();
 
   if (!project) return null;
@@ -44,37 +18,41 @@ export function ClientViewPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0b0f] text-[#f0f1f3]">
-      {/* Toolbar — hidden in print */}
-      <div className="no-print sticky top-0 z-10 flex items-center gap-3 px-6 py-3 bg-[#0f1117] border-b border-[rgba(255,255,255,0.06)]">
+    <div className="min-h-screen bg-base text-ink">
+      {/* Toolbar */}
+      <div className="no-print sticky top-0 z-10 flex items-center gap-3 px-6 py-3 bg-surface border-b border-line">
         <button
           onClick={() => setView('editor')}
-          className="flex items-center gap-1.5 text-[12px] text-[#8b8fa8] hover:text-[#f0f1f3] transition-colors"
+          className="flex items-center gap-1.5 text-[12px] text-ink-2 hover:text-ink transition-colors"
         >
           <ArrowLeft size={14} /> Back to Editor
         </button>
         <div className="flex-1" />
         <button
           onClick={() => window.print()}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#6366f1] hover:bg-[#4f52e0] text-white text-[12px] font-medium transition-colors"
+          className="btn-primary text-[12px] py-1.5 px-3.5"
         >
           <Printer size={13} /> Print / Save PDF
         </button>
       </div>
 
-      {/* Print content */}
-      <div className="max-w-4xl mx-auto px-8 py-10 print-content">
-        {/* ── Cover page ── */}
-        <div className="print-page mb-16">
-          <div className="text-center py-16">
-            <div className="inline-flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full border border-[rgba(99,102,241,0.3)] bg-[rgba(99,102,241,0.08)]">
-              <div className="w-4 h-4 rounded bg-[#6366f1]" />
-              <span className="text-[11px] font-medium text-[#6366f1] uppercase tracking-widest">Beyond Finesse</span>
-            </div>
-            <h1 className="text-[32px] font-bold text-[#f0f1f3] mb-2">{project.name}</h1>
-            <p className="text-[16px] text-[#8b8fa8] mb-8">Keypad Engraving Layout</p>
+      {/* Content */}
+      <div className="max-w-4xl mx-auto px-8 py-12 print-content">
 
-            <div className="inline-grid grid-cols-2 gap-x-16 gap-y-4 text-left mt-8">
+        {/* Cover */}
+        <div className="print-page mb-16">
+          <div className="text-center py-14">
+            <div className="inline-flex items-center gap-2 mb-8 px-3.5 py-1.5 rounded-full border border-accent bg-accent-dim">
+              <div className="w-4 h-4 rounded-md bg-accent" />
+              <span className="text-[11px] font-semibold text-accent uppercase tracking-widest">Beyond Finesse</span>
+            </div>
+
+            <h1 className="text-[38px] font-bold text-ink mb-2" style={{ letterSpacing: '-0.025em' }}>
+              {project.name}
+            </h1>
+            <p className="text-[17px] text-ink-2 mb-10">Keypad Engraving Layout</p>
+
+            <div className="inline-grid grid-cols-2 gap-x-16 gap-y-5 text-left mt-4">
               {[
                 { label: 'Client', value: project.client },
                 { label: 'Project Code', value: project.projectCode },
@@ -82,76 +60,74 @@ export function ClientViewPage() {
                 { label: 'Date', value: project.date },
                 { label: 'Revision', value: `R${project.revision}` },
                 { label: 'Status', value: statusLabels[project.status] ?? project.status },
-              ].map(row => (
-                row.value ? (
-                  <div key={row.label}>
-                    <p className="text-[11px] text-[#565a72] uppercase tracking-widest mb-0.5">{row.label}</p>
-                    <p className="text-[14px] text-[#f0f1f3] font-medium">{row.value}</p>
-                  </div>
-                ) : null
-              ))}
+              ].map(row => row.value ? (
+                <div key={row.label}>
+                  <p className="text-[10px] font-semibold text-ink-3 uppercase tracking-[0.08em] mb-0.5">{row.label}</p>
+                  <p className="text-[14px] text-ink font-medium">{row.value}</p>
+                </div>
+              ) : null)}
             </div>
 
             {project.globalNotes && (
-              <div className="mt-10 p-4 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] max-w-sm mx-auto">
-                <p className="text-[12px] text-[#8b8fa8] italic">{project.globalNotes}</p>
+              <div className="mt-10 p-5 rounded-2xl border border-line bg-raised max-w-sm mx-auto">
+                <p className="text-[12px] text-ink-2 italic leading-relaxed">{project.globalNotes}</p>
               </div>
             )}
           </div>
         </div>
 
-        {/* ── Room pages ── */}
+        {/* Rooms */}
         {project.rooms.map((room, ri) => (
-          <div key={room.id} className={ri < project.rooms.length - 1 ? 'print-page mb-12' : 'mb-12'}>
-            <div className="flex items-center gap-3 mb-6 pb-3 border-b border-[rgba(255,255,255,0.1)]">
-              <div className="w-1 h-6 rounded-full bg-[#6366f1]" />
-              <h2 className="text-[18px] font-bold text-[#f0f1f3]">{room.name}</h2>
-              <span className="text-[12px] text-[#565a72]">{room.type}</span>
+          <div key={room.id} className={ri < project.rooms.length - 1 ? 'print-page mb-14' : 'mb-14'}>
+            <div className="flex items-center gap-3 mb-7 pb-4 border-b border-line">
+              <div className="w-1 h-7 rounded-full bg-accent" />
+              <div>
+                <h2 className="text-[20px] font-bold text-ink" style={{ letterSpacing: '-0.015em' }}>{room.name}</h2>
+                <p className="text-[12px] text-ink-3">{room.type}</p>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {room.keypads.map(kp => {
-                const model = kp.modelId ? models.find(m => m.id === kp.modelId) : null;
+                const model = kp.modelId ? getModel(kp.modelId) : undefined;
                 const bodyColor = model && kp.selectedColorId
-                  ? model.colors.find(c => c.id === kp.selectedColorId)
-                  : null;
-                const bodyHex = bodyColor?.hex ?? kp.finish?.startsWith('#') ? kp.finish : undefined;
+                  ? model.colors.find(c => c.id === kp.selectedColorId)?.hex
+                  : undefined;
                 return (
                   <ClientKeypadCard
                     key={kp.id}
                     keypad={kp}
                     textCase={project.settings.textCase}
-                    bodyHex={bodyHex}
-                    models={models}
+                    bodyHex={bodyColor}
                   />
                 );
               })}
             </div>
 
             {room.notes && (
-              <p className="mt-4 text-[12px] text-[#8b8fa8] italic">{room.notes}</p>
+              <p className="mt-4 text-[12px] text-ink-2 italic">{room.notes}</p>
             )}
           </div>
         ))}
 
-        {/* ── Signature ── */}
-        <div className="mt-16 pt-8 border-t border-[rgba(255,255,255,0.1)]">
+        {/* Signature */}
+        <div className="mt-16 pt-8 border-t border-line">
           <div className="grid grid-cols-2 gap-12">
             <div>
-              <div className="h-12 border-b border-[rgba(255,255,255,0.15)] mb-2" />
-              <p className="text-[11px] text-[#565a72]">Client Approval Signature</p>
-              <p className="text-[11px] text-[#565a72] mt-0.5">Date: ___________________</p>
+              <div className="h-14 border-b border-line-strong mb-2" />
+              <p className="text-[11px] text-ink-3">Client Approval Signature</p>
+              <p className="text-[11px] text-ink-3 mt-0.5">Date: ___________________</p>
             </div>
             <div>
-              <div className="h-12 border-b border-[rgba(255,255,255,0.15)] mb-2" />
-              <p className="text-[11px] text-[#565a72]">Prepared By — Beyond Alliance</p>
-              <p className="text-[11px] text-[#565a72] mt-0.5">{project.preparedBy || '___________________'}</p>
+              <div className="h-14 border-b border-line-strong mb-2" />
+              <p className="text-[11px] text-ink-3">Prepared By — Beyond Alliance</p>
+              <p className="text-[11px] text-ink-3 mt-0.5">{project.preparedBy || '___________________'}</p>
             </div>
           </div>
         </div>
 
         <div className="mt-8 text-center">
-          <p className="text-[10px] text-[#565a72]">
+          <p className="text-[10px] text-ink-3">
             {project.projectCode} · Revision R{project.revision} · {project.date} · Confidential
           </p>
         </div>
@@ -160,117 +136,56 @@ export function ClientViewPage() {
   );
 }
 
-// ─── ClientKeypadCard ─────────────────────────────────────────────────────────
+/* ── Keypad card ─────────────────────────────────────────── */
+function getLuminance(hex: string) {
+  const h = hex.replace('#', '');
+  const r = parseInt(h.slice(0,2),16)/255, g = parseInt(h.slice(2,4),16)/255, b = parseInt(h.slice(4,6),16)/255;
+  return 0.299*r + 0.587*g + 0.114*b;
+}
+function shiftBrightness(hex: string, amount: number) {
+  const h = hex.replace('#', '');
+  const c = (s: number) => Math.min(255, Math.max(0, parseInt(h.slice(s,s+2),16)+amount)).toString(16).padStart(2,'0');
+  return '#'+c(0)+c(2)+c(4);
+}
 
-function ClientKeypadCard({
-  keypad,
-  textCase,
-  bodyHex,
-  models,
-}: {
-  keypad: Keypad;
-  textCase: TextCase;
+function ClientKeypadCard({ keypad, textCase, bodyHex }: {
+  keypad: { name: string; location: string; brand: string; model: string; buttonCount: number; quantity: number; notes: string;
+    buttons: Array<{ id: string; position: number; label: string; engravingMode?: string; icon?: string }> };
+  textCase: 'uppercase' | 'titlecase';
   bodyHex?: string;
-  models: ReturnType<typeof useRepositoryStore.getState>['models'];
 }) {
   const rows = keypad.buttonCount / 2;
+  const grid = Array.from({ length: rows }, (_, r) => keypad.buttons.slice(r * 2, r * 2 + 2));
 
   const fmt = (s: string) =>
-    textCase === 'uppercase'
-      ? s.toUpperCase()
+    textCase === 'uppercase' ? s.toUpperCase()
       : s.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
 
-  // Resolve physical colors
-  const dark = bodyHex ? isDark(bodyHex) : true;
-  const printColor = bodyHex ? (dark ? '#ffffff' : '#111318') : '#f0f1f3';
-  const headerBg = bodyHex ? shiftBrightness(bodyHex, dark ? 15 : -15) : undefined;
-  const buttonBg = bodyHex ? shiftBrightness(bodyHex, dark ? 22 : -22) : undefined;
-  const borderColor = bodyHex
-    ? `${shiftBrightness(bodyHex, dark ? 30 : -30)}66`
-    : 'rgba(255,255,255,0.1)';
+  const dark = bodyHex && getLuminance(bodyHex) < 0.45;
+  const printColor = bodyHex ? (dark ? '#f5f5f7' : '#1d1d1f') : undefined;
+  const headerBg = bodyHex ? shiftBrightness(bodyHex, dark ? 12 : -8) : undefined;
+  const btnBg = bodyHex ? (dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)') : undefined;
 
-  // For no-color case, use theme-aware classes; for physical color, inline styles
-  const model = keypad.modelId ? models.find(m => m.id === keypad.modelId) : null;
-
-  if (!bodyHex) {
-    // ── No physical color: theme-responsive card ──────────────────────────────
-    return (
-      <div className="card overflow-hidden">
-        <div className="px-4 py-3 border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)]">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[13px] font-semibold text-[#f0f1f3]">{keypad.name || keypad.location}</p>
-              <p className="text-[11px] text-[#565a72] mt-0.5">
-                {[keypad.location, keypad.brand, keypad.model].filter(Boolean).join(' · ')}
-              </p>
-            </div>
-            {keypad.quantity > 1 && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[rgba(255,255,255,0.06)] text-[#8b8fa8]">
-                Qty: {keypad.quantity}
-              </span>
-            )}
-          </div>
-        </div>
-        <div className="p-3">
-          <div
-            className="grid border border-[rgba(255,255,255,0.08)] rounded-lg overflow-hidden"
-            style={{ gridTemplateColumns: '1fr 1fr', gridTemplateRows: `repeat(${rows}, 1fr)` }}
-          >
-            {Array.from({ length: rows }, (_, r) =>
-              keypad.buttons.slice(r * 2, r * 2 + 2).map(btn => {
-                const mode: EngravingMode = btn.engravingMode ?? 'text';
-                const IconComp = btn.icon ? ICON_MAP[btn.icon] : null;
-                return (
-                  <div
-                    key={btn.id}
-                    className="flex flex-col items-center justify-center min-h-[52px] px-2 gap-1 border border-[rgba(255,255,255,0.06)]"
-                  >
-                    {(mode === 'icon' || mode === 'text+icon') && IconComp && (
-                      <IconComp size={13} className="text-[#f0f1f3] opacity-80" />
-                    )}
-                    {(mode === 'text' || mode === 'text+icon') && (
-                      <span className="text-[11px] font-semibold tracking-wider text-center text-[#f0f1f3]">
-                        {btn.label ? fmt(btn.label) : <span className="text-[#565a72] font-normal text-[10px]">—</span>}
-                      </span>
-                    )}
-                    {mode === 'icon' && !IconComp && (
-                      <span className="text-[#565a72] text-[10px]">—</span>
-                    )}
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Physical color card ─────────────────────────────────────────────────────
   return (
-    <div
-      className="rounded-xl overflow-hidden"
-      style={{ background: bodyHex, border: `1px solid ${borderColor}` }}
-    >
+    <div className="rounded-xl border border-line overflow-hidden"
+      style={bodyHex ? { backgroundColor: bodyHex, borderColor: shiftBrightness(bodyHex, dark ? 30 : -20) }
+        : { backgroundColor: 'var(--surface)' }}>
       {/* Header */}
-      <div
-        className="px-4 py-3 border-b"
-        style={{ background: headerBg, borderColor }}
-      >
+      <div className="px-4 py-3 border-b"
+        style={bodyHex ? { backgroundColor: headerBg, borderColor: dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)' }
+          : { borderColor: 'var(--line)', backgroundColor: 'var(--raised)' }}>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[13px] font-semibold" style={{ color: printColor }}>
+            <p className="text-[13px] font-semibold" style={{ color: printColor ?? 'var(--ink)' }}>
               {keypad.name || keypad.location}
             </p>
-            <p className="text-[11px] mt-0.5" style={{ color: `${printColor}99` }}>
+            <p className="text-[11px] mt-0.5" style={{ color: printColor ? (dark ? 'rgba(245,245,247,0.6)' : 'rgba(29,29,31,0.5)') : 'var(--ink-3)' }}>
               {[keypad.location, keypad.brand, keypad.model].filter(Boolean).join(' · ')}
             </p>
           </div>
           {keypad.quantity > 1 && (
-            <span
-              className="text-[10px] px-1.5 py-0.5 rounded"
-              style={{ background: `${printColor}22`, color: printColor }}
-            >
+            <span className="text-[10px] px-2 py-0.5 rounded font-medium"
+              style={{ background: dark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.07)', color: printColor ?? 'var(--ink-2)' }}>
               Qty: {keypad.quantity}
             </span>
           )}
@@ -284,42 +199,28 @@ function ClientKeypadCard({
           style={{
             gridTemplateColumns: '1fr 1fr',
             gridTemplateRows: `repeat(${rows}, 1fr)`,
-            gap: 2,
-            background: borderColor,
+            gap: bodyHex ? '2px' : '0',
+            border: bodyHex ? 'none' : '1px solid var(--line)',
+            borderRadius: '8px',
           }}
         >
-          {Array.from({ length: rows }, (_, r) =>
-            keypad.buttons.slice(r * 2, r * 2 + 2).map(btn => {
-              const mode: EngravingMode = btn.engravingMode ?? 'text';
-              const IconComp = btn.icon ? ICON_MAP[btn.icon] : null;
-              const btnColorHex = (model?.hasButtonColors && keypad.selectedButtonColors?.[btn.position])
-                ? model.buttonColors.find(c => c.id === keypad.selectedButtonColors![btn.position])?.hex
-                : undefined;
-              const cellBg = btnColorHex ?? buttonBg!;
-              const cellPrint = btnColorHex
-                ? (isDark(btnColorHex) ? '#ffffff' : '#111318')
-                : printColor;
-              return (
-                <div
-                  key={btn.id}
-                  className="flex flex-col items-center justify-center min-h-[52px] px-2 gap-1"
-                  style={{ background: cellBg }}
-                >
-                  {(mode === 'icon' || mode === 'text+icon') && IconComp && (
-                    <IconComp size={13} style={{ color: cellPrint, opacity: 0.9 }} />
-                  )}
-                  {(mode === 'text' || mode === 'text+icon') && (
-                    <span className="text-[11px] font-semibold tracking-wider text-center" style={{ color: cellPrint }}>
-                      {btn.label ? fmt(btn.label) : <span style={{ color: `${cellPrint}40`, fontWeight: 400, fontSize: 10 }}>—</span>}
-                    </span>
-                  )}
-                  {mode === 'icon' && !IconComp && (
-                    <span style={{ color: `${cellPrint}40`, fontSize: 10 }}>—</span>
-                  )}
-                </div>
-              );
-            })
-          )}
+          {grid.map(row => row.map(btn => (
+            <div
+              key={btn.id}
+              className="flex items-center justify-center min-h-[52px] px-2"
+              style={{
+                backgroundColor: btnBg ?? 'var(--raised)',
+                borderColor: 'var(--line)',
+                borderWidth: bodyHex ? 0 : '1px',
+                borderStyle: 'solid',
+              }}
+            >
+              <span className="text-[11px] font-bold tracking-wider text-center leading-tight"
+                style={{ color: printColor ?? 'var(--ink)' }}>
+                {btn.label ? fmt(btn.label) : <span style={{ opacity: 0.3 }}>—</span>}
+              </span>
+            </div>
+          )))}
         </div>
       </div>
     </div>

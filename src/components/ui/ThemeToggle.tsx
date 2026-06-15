@@ -1,29 +1,30 @@
 import { Moon, Monitor, Sun } from 'lucide-react';
-import { useStore, type Theme } from '../../store/useStore';
+import { useStore } from '../../store/useStore';
+import type { Theme } from '../../store/useStore';
 
-const OPTIONS: { id: Theme; Icon: typeof Moon; label: string }[] = [
-  { id: 'dark',   Icon: Moon,    label: 'Dark' },
-  { id: 'system', Icon: Monitor, label: 'System' },
-  { id: 'light',  Icon: Sun,     label: 'Light' },
+const OPTIONS: { value: Theme; Icon: typeof Moon; title: string }[] = [
+  { value: 'light',  Icon: Sun,     title: 'Light mode' },
+  { value: 'system', Icon: Monitor, title: 'System' },
+  { value: 'dark',   Icon: Moon,    title: 'Dark mode' },
 ];
 
 export function ThemeToggle() {
   const { theme, setTheme } = useStore();
-
   return (
-    <div className="flex items-center gap-0.5 p-0.5 rounded-lg bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.08)]">
-      {OPTIONS.map(({ id, Icon, label }) => (
+    <div className="flex items-center rounded-lg border border-line bg-raised p-0.5 gap-0.5">
+      {OPTIONS.map(({ value, Icon, title }) => (
         <button
-          key={id}
-          onClick={() => setTheme(id)}
-          title={label}
-          className={`flex items-center justify-center w-7 h-6 rounded-md transition-all ${
-            theme === id
-              ? 'bg-[rgba(99,102,241,0.2)] text-[#6366f1]'
-              : 'text-[#565a72] hover:text-[#8b8fa8]'
-          }`}
+          key={value}
+          onClick={() => setTheme(value)}
+          title={title}
+          className={[
+            'flex items-center justify-center w-7 h-7 rounded-md transition-all duration-150',
+            theme === value
+              ? 'bg-surface text-ink shadow-sm'
+              : 'text-ink-3 hover:text-ink-2',
+          ].join(' ')}
         >
-          <Icon size={12} />
+          <Icon size={13} />
         </button>
       ))}
     </div>
