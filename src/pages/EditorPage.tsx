@@ -1,6 +1,7 @@
 import { DndContext, DragOverlay, useSensor, useSensors, PointerSensor, type DragEndEvent } from '@dnd-kit/core';
 import { Plus, LayoutGrid } from 'lucide-react';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../store/useStore';
 import { TopBar } from '../components/layout/TopBar';
 import { LeftSidebar } from '../components/layout/LeftSidebar';
@@ -101,15 +102,30 @@ export function EditorPage() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-              {room.keypads.map(kp => (
-                <KeypadVisual
-                  key={kp.id}
-                  keypad={kp}
-                  textCase={textCase}
-                />
-              ))}
-            </div>
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"
+              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
+              initial="hidden"
+              animate="show"
+              key={room.id}
+            >
+              <AnimatePresence>
+                {room.keypads.map(kp => (
+                  <motion.div
+                    key={kp.id}
+                    variants={{ hidden: { opacity: 0, y: 16, scale: 0.97 }, show: { opacity: 1, y: 0, scale: 1 } }}
+                    exit={{ opacity: 0, scale: 0.94, transition: { duration: 0.18 } }}
+                    transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    layout
+                  >
+                    <KeypadVisual
+                      keypad={kp}
+                      textCase={textCase}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
           )}
 
           {project.globalNotes && (

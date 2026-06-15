@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { clsx } from 'clsx';
+import { motion } from 'framer-motion';
 import { MessageSquare, AlertTriangle, Plus, Minus } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { useRepositoryStore } from '../../store/useRepositoryStore';
@@ -259,10 +260,14 @@ export function KeypadVisual({ keypad, textCase }: KeypadVisualProps) {
     : 'rgba(255,255,255,0.06)';
 
   return (
-    <div
-      className="rounded-xl overflow-hidden transition-all duration-150 cursor-pointer"
+    <motion.div
+      className="rounded-xl overflow-hidden cursor-pointer"
       style={{ backgroundColor: cardBg, border: `1.5px solid ${cardBorder}` }}
       onClick={() => setActiveKeypad(keypad.id)}
+      whileHover={{ scale: 1.012, boxShadow: isActiveKp ? '0 0 0 2px var(--accent), 0 12px 32px rgba(0,0,0,0.2)' : '0 8px 24px rgba(0,0,0,0.16)' }}
+      whileTap={{ scale: 0.985 }}
+      animate={isActiveKp ? { boxShadow: '0 0 0 2px rgba(99,102,241,0.5), 0 8px 24px rgba(0,0,0,0.18)' } : { boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+      transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {/* ── Header info strip ── */}
       <div
@@ -393,6 +398,6 @@ export function KeypadVisual({ keypad, textCase }: KeypadVisualProps) {
           <p className="text-[10px] italic" style={{ color: headerSubtext }}>{keypad.notes}</p>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

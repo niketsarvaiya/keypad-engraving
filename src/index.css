@@ -340,3 +340,76 @@ html:not(.dark):not(.system) .scrollbar-thin::-webkit-scrollbar-thumb {
     color 0.12s ease,
     box-shadow 0.15s ease;
 }
+
+/* ─── Keyframe animations ───────────────────────────────────── */
+@keyframes float-bob {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.30; transform: scale(1); }
+  50%       { opacity: 0.55; transform: scale(1.12); }
+}
+
+@keyframes shimmer-sweep {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes badge-pop {
+  0%   { transform: scale(0.8); opacity: 0; }
+  65%  { transform: scale(1.06); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+@keyframes slide-up-fade {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dot-appear {
+  from { opacity: 0; transform: scale(0); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ─── Animation utilities ───────────────────────────────────── */
+@layer utilities {
+  .animate-float      { animation: float-bob 3.0s ease-in-out infinite; }
+  .animate-float-2    { animation: float-bob 3.4s ease-in-out infinite 0.5s; }
+  .animate-float-3    { animation: float-bob 3.8s ease-in-out infinite 1.0s; }
+  .animate-glow       { animation: glow-breathe 3s ease-in-out infinite; }
+  .animate-spin-slow  { animation: spin-slow 8s linear infinite; }
+  .animate-pulse-ring { animation: pulse-ring 1.6s ease-out infinite; }
+  .animate-slide-up   { animation: slide-up-fade 0.5s ease-out both; }
+  .animate-badge-pop  { animation: badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+  .shimmer-text {
+    background: linear-gradient(90deg,
+      var(--ink) 0%,
+      var(--accent) 45%,
+      var(--ink) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer-sweep 4s linear infinite;
+  }
+
+  /* Dot-grid decorative background */
+  .dot-grid {
+    background-image: radial-gradient(circle, var(--ink-3) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+}
